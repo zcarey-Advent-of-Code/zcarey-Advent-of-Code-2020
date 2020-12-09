@@ -14,7 +14,7 @@ namespace Common {
 		protected abstract string CalculatePart1(T input);
 		protected abstract string CalculatePart2(T input);
 
-		public void Run(string FileName) {
+		public void Run(string FileName, bool skipPart1 = false) {
 			Console.WriteLine("Loading data...");
 			Console.WriteLine();
 			Console.WriteLine();
@@ -22,11 +22,15 @@ namespace Common {
 			T input2 = LoadInputData(FileName);
 
 			Console.WriteLine("Part 1");
-			timer.Start();
-			string answer1 = CalculatePart1(input1);
-			timer.Stop();
-			Console.WriteLine("The answer is {0}.", answer1);
-			Console.WriteLine("This only took {0:g}!", timer.Elapsed);
+			if (!skipPart1) {
+				timer.Start();
+				string answer1 = CalculatePart1(input1);
+				timer.Stop();
+				Console.WriteLine("The answer is {0}.", answer1);
+				Console.WriteLine("This only took {0:g}!", timer.Elapsed);
+			} else {
+				Console.WriteLine("Part 1 was skipped!");
+			}
 
 			Console.WriteLine();
 			Console.WriteLine();
@@ -96,6 +100,29 @@ namespace Common {
 				result.Parse(x.ToArray());
 				return result;
 			}).ToArray();
+		}
+	}
+
+	public abstract class SeparatedInputProgramStructure : ProgramStructure<string[]> {
+		private string separator;
+		protected SeparatedInputProgramStructure(string Separator) {
+			this.separator = Separator;
+		}
+		protected sealed override string[] LoadInputData(string FileName) {
+			return File.ReadAllText(FileName).Split(separator);
+		}
+	}
+
+	public abstract class ParsedSeparatedInputProgramStructure<T> : ProgramStructure<T[]> {
+		private string separator;
+		private Func<string, T> Parser;
+
+		protected ParsedSeparatedInputProgramStructure(string Separator, Func<string, T> ParseFunc) {
+			this.separator = Separator;
+			this.Parser = ParseFunc;
+		}
+		protected sealed override T[] LoadInputData(string FileName) {
+			return File.ReadAllText(FileName).Split(separator).Select(Parser).ToArray();
 		}
 	}
 }
