@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -6,50 +7,29 @@ using System.Linq;
 using System.Numerics;
 
 namespace Day3 {
-	class Program {
-
-		const string InputFileName = "Input.txt";
-		static Stopwatch timer = new Stopwatch();
+	class Program : FullParsedInputProgramStructure<Map> {
 
 		static void Main(string[] args) {
-			Console.WriteLine("Loading data...");
-			string[] input = loadInputData();
-			Map map = new Map(input); //Parse the data into a map
-
-			Console.WriteLine("Calculating...");
-			timer.Start();
-			int answer = calculateAnswer(map);
-			BigInteger part2 = calculatePart2(map);
-			timer.Stop();
-
-			Console.WriteLine("The answer is {0}.", answer);
-			Console.WriteLine("The answer to part 2 is {0}.", part2);
-			Console.WriteLine("This only took {0:g}!", timer.Elapsed);
-			Console.Write("Press any key to exit.");
-			Console.ReadKey();
+			new Program().Run("Input.txt");
 		}
 
-		static string[] loadInputData() {
-			return File.ReadAllLines(InputFileName);
-		}
-
-		//There is actually a faster way to do this, but eh, input isn't large enough to care tbh.
-		static int calculateAnswer(Map map) {
-			int trees = map.HitTree ? 1 : 0;
-			for (; map.OnSlope; map.Slide()) {
-				if (map.HitTree) {
+		protected override string CalculatePart1(Map input) {
+			int trees = input.HitTree ? 1 : 0;
+			for (; input.OnSlope; input.Slide()) {
+				if (input.HitTree) {
 					trees++;
 				}
 			}
-			return trees;
+			return trees.ToString();
 		}
 
-		static BigInteger calculatePart2(Map map) {
-			return new BigInteger(calculateSlope(map, 1, 1))
-				* new BigInteger(calculateSlope(map, 3, 1))
-				* new BigInteger(calculateSlope(map, 5, 1))
-				* new BigInteger(calculateSlope(map, 7, 1))
-				* new BigInteger(calculateSlope(map, 1, 2));
+		//There is actually a faster way to do this, but eh, input isn't large enough to care tbh.
+		protected override string CalculatePart2(Map input) {
+			return (new BigInteger(calculateSlope(input, 1, 1))
+				* new BigInteger(calculateSlope(input, 3, 1))
+				* new BigInteger(calculateSlope(input, 5, 1))
+				* new BigInteger(calculateSlope(input, 7, 1))
+				* new BigInteger(calculateSlope(input, 1, 2))).ToString();
 		}
 
 		static int calculateSlope(Map map, int right, int down) {

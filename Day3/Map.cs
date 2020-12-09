@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 
 namespace Day3 {
-	class Map {
+	class Map : FullInputParser {
 
 		private bool[,] map;
 		private int width;
@@ -23,18 +24,18 @@ namespace Day3 {
 		public bool HitTree { get => map[position.X, position.Y]; }
 
 		//Parses a map from the entire input data (read as lines)
-		public Map(string[] input) {
+		public void Parse(string[] input) {
 			width = input[0].Length;
 			height = input.Length;
 			map = new bool[width, height];
 
-			for(int y = 0; y < height; y++) {
+			for (int y = 0; y < height; y++) {
 				string line = input[y];
-				for(int x = 0; x < width; x++) {
+				for (int x = 0; x < width; x++) {
 					char cell = line[x];
-					if(cell == '.') {
+					if (cell == '.') {
 						map[x, y] = false;
-					} else if(cell == '#') {
+					} else if (cell == '#') {
 						map[x, y] = true;
 					} else {
 						throw new Exception("Bad input data.");

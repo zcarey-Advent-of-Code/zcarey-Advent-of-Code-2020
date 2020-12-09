@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Day4 {
+namespace Common {
 	public static class LinqExtensions {
 
 		/// <summary>
