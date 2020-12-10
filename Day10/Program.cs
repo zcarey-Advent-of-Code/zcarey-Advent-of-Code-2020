@@ -1,9 +1,22 @@
-﻿using System;
+﻿using Common;
+using System;
 
 namespace Day10 {
-	class Program {
+	class Program : ParsedInputProgramStructure<int> {
+
+		Program() : base(int.Parse) {
+		}
+
 		static void Main(string[] args) {
-			Console.WriteLine("Hello World!");
+			new Program().Run("Input.txt");
+		}
+
+		protected override string CalculatePart1(int[] input) {
+			throw new NotImplementedException();
+		}
+
+		protected override string CalculatePart2(int[] input) {
+			return "null";
 		}
 	}
 }
