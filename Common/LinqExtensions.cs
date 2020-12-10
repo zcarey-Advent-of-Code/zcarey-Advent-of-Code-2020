@@ -40,5 +40,11 @@ namespace Common {
 			}
 		}
 
+		public static IEnumerable<T> Concat<T>(this IEnumerable<T> source, T newElement) {
+			if (source == null) throw new ArgumentNullException("source", "Enumberable was null.");
+			foreach (T element in source) yield return element;
+			yield return newElement;
+		}
+
 	}
 }
