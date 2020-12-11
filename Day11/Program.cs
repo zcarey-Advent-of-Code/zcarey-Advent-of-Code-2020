@@ -8,12 +8,21 @@ namespace Day11 {
 		}
 
 		protected override string CalculatePart1(Map input) {
-			input.Simulate();
+			bool updated = true;
+			while (updated) {
+				input.UpdateOccupiedCount();
+				updated = input.UpdateSeatState(4);
+			}
 			return input.CountOccupiedSeats().ToString();
 		}
 
 		protected override string CalculatePart2(Map input) {
-			return "null";
+			bool updated = true;
+			while (updated) {
+				input.UpdateOccupiedCount2();
+				updated = input.UpdateSeatState(5);
+			}
+			return input.CountOccupiedSeats().ToString();
 		}
 	}
 }

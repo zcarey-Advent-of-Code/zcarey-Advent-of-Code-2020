@@ -1,6 +1,7 @@
 ﻿using Common;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace Day11 {
@@ -15,14 +16,14 @@ namespace Day11 {
 			Width = input[0].Length;
 			Height = input.Length;
 			map = new int[Width, Height];
-			for(int y = 0; y < Height; y++) {
-				for(int x = 0; x < Width; x++) {
+			for (int y = 0; y < Height; y++) {
+				for (int x = 0; x < Width; x++) {
 					char c = input[y][x];
-					if(c == '.') {
+					if (c == '.') {
 						map[x, y] |= (int)SeatState.Floor;
-					}else if(c == 'L') {
+					} else if (c == 'L') {
 						map[x, y] |= (int)SeatState.Empty;
-					}else if(c == '#') {
+					} else if (c == '#') {
 						map[x, y] |= (int)SeatState.Occupied;
 					} else {
 						throw new Exception("Unknown seat character.");
@@ -31,21 +32,11 @@ namespace Day11 {
 			}
 		}
 
-		public void Simulate() {
-			while (Update()) ;
-		}
-
-		//Return true if at least one seat state updated
-		public bool Update() {
-			updateOccupiedCount();
-			return updateSeatState();
-		}
-
 		public int CountOccupiedSeats() {
 			int count = 0;
-			for(int y = 0; y < Height; y++) {
-				for(int x = 0; x < Width; x++) {
-					if(isOccupied(x, y)) {
+			for (int y = 0; y < Height; y++) {
+				for (int x = 0; x < Width; x++) {
+					if (isOccupied(x, y)) {
 						count++;
 					}
 				}
@@ -77,8 +68,8 @@ namespace Day11 {
 			return map[x, y] & 0x0F;
 		}
 
-		private void updateOccupiedCount() {
-			for(int y = 0; y < Height; y++) {
+		public void UpdateOccupiedCount() {
+			for (int y = 0; y < Height; y++) {
 				for (int x = 0; x < Width; x++) {
 					if (isSeat(x, y)) {
 						//Count surrounding seats
@@ -98,19 +89,19 @@ namespace Day11 {
 		}
 
 		//Returns true if at least one seat state updated
-		private bool updateSeatState() {
+		public bool UpdateSeatState(int tolerance) {
 			bool updated = false;
 			for (int y = 0; y < Height; y++) {
 				for (int x = 0; x < Width; x++) {
 					if (isSeat(x, y)) {
 						int count = getSeatCount(x, y);
 						if (isOccupied(x, y)) {
-							if(count >= 4) {
+							if (count >= tolerance) {
 								setOccupied(x, y, false);
 								updated = true;
 							}
 						} else {
-							if(count == 0) {
+							if (count == 0) {
 								setOccupied(x, y, true);
 								updated = true;
 							}
@@ -119,6 +110,66 @@ namespace Day11 {
 				}
 			}
 			return updated;
+		}
+
+		public void UpdateOccupiedCount2() {
+			for (int y = 0; y < Height; y++) {
+				for (int x = 0; x < Width; x++) {
+					if (isSeat(x, y)) {
+						//Count surrounding seats
+						setSeatCount(x, y, getPart2SeatCount(x, y));
+					}
+				}
+			}
+		}
+
+		private int getPart2SeatCount(int x, int y) {
+			int count = 0;
+			foreach(Direction dir in AllDirections) {
+				Point? hit = FindFirstSeat(x, y, dir);
+				if((hit != null) && (isOccupied(hit.Value.X, hit.Value.Y))) {
+					count++;
+				}
+			}
+			return count;
+		}
+
+		private Point? FindFirstSeat(int x, int y, Direction dir) {
+			int dx = (int)(sbyte)(((int)dir >> 8) & 0xFF);
+			int dy = (int)(sbyte)((int)dir & 0xFF);
+
+			x += dx;
+			y += dy;
+			bool insideMap = isValidLocation(x, y);
+			while (insideMap) {
+				if (isSeat(x, y)) {
+					return new Point(x, y);
+				}
+				x += dx;
+				y += dy;
+				insideMap = isValidLocation(x, y);
+			}
+			return null;
+		}
+
+
+		private static Direction[] AllDirections = new Direction[]{
+			Direction.North,
+			Direction.North | Direction.East,
+			Direction.East,
+			Direction.South | Direction.East,
+			Direction.South,
+			Direction.South | Direction.West,
+			Direction.West,
+			Direction.North | Direction.West
+		};
+
+		[Flags]
+		enum Direction {
+			North = 0x00FF,
+			South = 0x0001,
+			East = 0x0100,
+			West = 0xFF00
 		}
 
 	}
