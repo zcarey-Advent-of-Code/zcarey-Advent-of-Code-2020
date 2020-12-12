@@ -9,13 +9,14 @@ namespace Day12 {
 		public char Operation;
 		public int Units;
 
-		public bool IsMoveCommand { get => getIsMoveCommand(); }
+		//public bool IsMoveCommand { get => getIsMoveCommand(); }
 
 		public Instruction(string input) {
 			this.Operation = input[0];
 			this.Units = int.Parse(input.Substring(1));
 		}
 
+		//Only used in part 1
 		public Size Update(ref int angle) {
 			switch (Operation) {
 				case 'N': return new Size(0, -Units);
@@ -33,7 +34,7 @@ namespace Day12 {
 					throw new Exception("Invalid Operation.");
 			}
 		}
-
+		/*
 		private bool getIsMoveCommand() {
 			switch (Operation) {
 				case 'N':
@@ -45,7 +46,7 @@ namespace Day12 {
 				default:
 					return false;
 			}
-		}
+		}*/
 
 	}
 }
