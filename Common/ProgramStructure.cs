@@ -13,7 +13,6 @@ namespace Common {
 
 		protected abstract string CalculatePart1(T input);
 		protected abstract string CalculatePart2(T input);
-		protected abstract bool HasVisualizer { get; }
 
 		public void Run(string FileName, bool skipPart1 = false) {
 			Console.WriteLine("Loading data...");
