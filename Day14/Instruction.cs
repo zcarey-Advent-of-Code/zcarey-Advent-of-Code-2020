@@ -7,7 +7,7 @@ namespace Day14 {
 	abstract class Instruction {
 
 		public abstract void Update(long[] memory, ref long mask, ref long maskSet);
-		public abstract void UpdatePart2(Dictionary<long, long> memory, ref long mask, ref long maskSet, StreamWriter debug);
+		public abstract void UpdatePart2(Dictionary<long, long> memory, ref long mask, ref long maskSet);
 
 		public static Instruction Parse(string input) {
 			Instruction result = null;
@@ -33,9 +33,8 @@ namespace Day14 {
 			maskSet = this.maskSet;
 		}
 
-		public override void UpdatePart2(Dictionary<long, long> memory, ref long mask, ref long maskSet, StreamWriter debug) {
+		public override void UpdatePart2(Dictionary<long, long> memory, ref long mask, ref long maskSet) {
 			this.Update(null, ref mask, ref maskSet);
-			//Console.WriteLine("Mask = {0}\t\tSet = {1}", Convert.ToString(this.mask, 2).PadLeft(36, '0'), Convert.ToString(this.maskSet, 2).PadLeft(36, '0'));
 		}
 
 		public static Instruction TryParse(string input) {
@@ -71,23 +70,22 @@ namespace Day14 {
 			memory[index] = (this.value & mask) | maskSet;
 		}
 
-		public override void UpdatePart2(Dictionary<long, long> memory, ref long mask, ref long maskSet, StreamWriter debug) {
-			SetValues(memory, this.index | maskSet, this.value, 0, mask, debug);
+		public override void UpdatePart2(Dictionary<long, long> memory, ref long mask, ref long maskSet) {
+			SetValues(memory, this.index | maskSet, this.value, 0, mask);
 		}
 
-		private void SetValues(Dictionary<long, long> memory, long address, long value, int bitIndex, long mask, StreamWriter debug) {
+		private void SetValues(Dictionary<long, long> memory, long address, long value, int bitIndex, long mask) {
 			if (bitIndex >= 36) {
-				debug.WriteLine("mem[" + Convert.ToString(address, 2) + "] = " + value);
 				memory[address] = value;
 				return;
 			}
 			long bitMask = (long)1 << bitIndex;
 			if((mask & bitMask) != 0) {
 				//Try both a 0 and a 1 in this position
-				SetValues(memory, address & (~bitMask), value, bitIndex + 1, mask, debug); //Try 0
-				SetValues(memory, address | bitMask, value, bitIndex + 1, mask, debug); //Try 1
+				SetValues(memory, address & (~bitMask), value, bitIndex + 1, mask); //Try 0
+				SetValues(memory, address | bitMask, value, bitIndex + 1, mask); //Try 1
 			} else {
-				SetValues(memory, address, value, bitIndex + 1, mask, debug);
+				SetValues(memory, address, value, bitIndex + 1, mask);
 			}
 		}
 
