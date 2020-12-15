@@ -1,5 +1,8 @@
 ﻿using Common;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Numerics;
 
 namespace Day14 {
 	class Program : ParsedInputProgramStructure<Instruction> {
@@ -9,6 +12,7 @@ namespace Day14 {
 
 		static void Main(string[] args) {
 			new Program().Run("Input.txt");
+			//new Program().Run("Example.txt");
 		}
 
 		protected override string CalculatePart1(Instruction[] input) {
@@ -22,7 +26,21 @@ namespace Day14 {
 		}
 
 		protected override string CalculatePart2(Instruction[] input) {
-			return "null";
+			using (FileStream file = File.OpenWrite("CS_day14_debug.txt")) {
+				using (StreamWriter file2 = new StreamWriter(file)) {
+					Dictionary<long, long> memory = new Dictionary<long, long>();
+					long mask = 0;
+					long maskSet = 0;
+					foreach (Instruction op in input) {
+						op.UpdatePart2(memory, ref mask, ref maskSet, file2);
+					}
+					BigInteger result = BigInteger.Zero;
+					foreach (KeyValuePair<long, long> pair in memory) {
+						result += new BigInteger(pair.Value);
+					}
+					return result.ToString();
+				}
+			}
 		}
 	}
 }
