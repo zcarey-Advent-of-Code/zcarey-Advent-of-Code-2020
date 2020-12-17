@@ -7,13 +7,14 @@ namespace Day17 {
 	class Map : FullInputParser {
 
 		private Dictionary<Point, bool> map = new Dictionary<Point, bool>();
+		private bool use4D = false;
 
 		public void Simulate(int activeMin, int activeMax, int inactiveVal) {
 			Dictionary<Point, bool> changes = new Dictionary<Point, bool>();
 			
 			//Find cell changes
 			foreach(KeyValuePair<Point, bool> cell in map) {
-				int active = GetSurroundingCube(cell.Key).Where(x => GetValue(x)).Count();
+				int active = GetSurroundingCells(cell.Key).Where(x => GetValue(x)).Count();
 				if (cell.Value) {
 					if((active < activeMin) || (active > activeMax)) {
 						changes[cell.Key] = false;
@@ -38,7 +39,7 @@ namespace Day17 {
 		private void SetValue(Point point, bool value) {
 			map[point] = value;
 			if (value == true) {
-				foreach (Point delta in GetSurroundingCube(point)) {
+				foreach (Point delta in GetSurroundingCells(point)) {
 					if(!map.ContainsKey(delta)) {
 						map[delta] = false;
 					}
@@ -55,12 +56,25 @@ namespace Day17 {
 			}
 		}
 
-		private IEnumerable<Point> GetSurroundingCube(Point point) {
-			for (int dz = -1; dz <= 1; dz++) {
-				for (int dy = -1; dy <= 1; dy++) {
-					for (int dx = -1; dx <= 1; dx++) {
-						if (dx == 0 && dy == 0 && dz == 0) continue;
-						yield return point + new Point(dx, dy, dz);
+		private IEnumerable<Point> GetSurroundingCells(Point point) {
+			if (this.use4D) {
+				for (int dw = -1; dw <= 1; dw++) {
+					for (int dz = -1; dz <= 1; dz++) {
+						for (int dy = -1; dy <= 1; dy++) {
+							for (int dx = -1; dx <= 1; dx++) {
+								if (dx == 0 && dy == 0 && dz == 0 && dw == 0) continue;
+								yield return point + new Point(dx, dy, dz, dw);
+							}
+						}
+					}
+				}
+			} else {
+				for (int dz = -1; dz <= 1; dz++) {
+					for (int dy = -1; dy <= 1; dy++) {
+						for (int dx = -1; dx <= 1; dx++) {
+							if (dx == 0 && dy == 0 && dz == 0) continue;
+							yield return point + new Point(dx, dy, dz, 0);
+						}
 					}
 				}
 			}
@@ -81,6 +95,14 @@ namespace Day17 {
 					point.X++;
 				}
 				point.Y++;
+			}
+		}
+
+		public void Initialize4D() {
+			use4D = true;
+			List<Point> reset = map.Where(x => x.Value == true).Select(x => x.Key).ToList();
+			foreach(Point cell in reset) {
+				SetValue(cell, true);
 			}
 		}
 	}

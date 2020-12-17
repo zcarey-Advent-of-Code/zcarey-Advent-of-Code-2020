@@ -16,7 +16,11 @@ namespace Day17 {
 		}
 
 		protected override string CalculatePart2(Map input) {
-			return "null";
+			input.Initialize4D();
+			for (int i = 0; i < 6; i++) {
+				input.Simulate(2, 3, 3);
+			}
+			return input.CountActive().ToString();
 		}
 	}
 }
