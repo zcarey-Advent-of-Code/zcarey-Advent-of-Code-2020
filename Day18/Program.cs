@@ -21,14 +21,18 @@ namespace Day18 {
 
 		protected override string CalculatePart1(Expression[] input) {
 			BigInteger result = BigInteger.Zero;
-			foreach(BigInteger answer in input.Select(x => x.Calculate())) {
+			foreach(BigInteger answer in input.Select(x => x.Calculate(false))) {
 				result += answer;
 			}
 			return result.ToString();
 		}
 
 		protected override string CalculatePart2(Expression[] input) {
-			return "null";
+			BigInteger result = BigInteger.Zero;
+			foreach (BigInteger answer in input.Select(x => x.Calculate(true))) {
+				result += answer;
+			}
+			return result.ToString();
 		}
 	}
 }

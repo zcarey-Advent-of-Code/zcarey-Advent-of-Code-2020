@@ -16,29 +16,29 @@ namespace Day18 {
 			this.result = constant;
 		}
 
-		public BigInteger Calculate() {
+		public BigInteger Calculate(bool additionFirst) {
 			if (parameters.Count == 0 && operators.Count == 0) return result;
 
 			while(operators.Count > 0) {
-				Reduce();
+				Reduce(additionFirst);
 			}
 			if (parameters.Count != 1) throw new Exception("Invalid state: there is no result.");
-			result = parameters[0].Calculate();
+			result = parameters[0].Calculate(additionFirst);
 			parameters.Clear();
 			return result;
 		}
 
-		private void Reduce() {
-			int operatorIndex = 0; // operators.IndexOf(Operator.Multiply);
-			/*if (operatorIndex < 0) {
+		private void Reduce(bool additionFirst) {
+			int operatorIndex = 0;
+			if (additionFirst) {
 				operatorIndex = operators.IndexOf(Operator.Add);
-				if(operatorIndex < 0) {
-					throw new Exception("Invalid operator.");
+				if (operatorIndex < 0) {
+					operatorIndex = 0;
 				}
-			}*/
+			}
 			int param1Index = operatorIndex;
 			int param2Index = param1Index + 1;
-			BigInteger result = operators[operatorIndex].Calculate(parameters[param1Index].Calculate(), parameters[param2Index].Calculate());
+			BigInteger result = operators[operatorIndex].Calculate(parameters[param1Index].Calculate(additionFirst), parameters[param2Index].Calculate(additionFirst));
 			parameters.RemoveAt(param2Index);
 			operators.RemoveAt(operatorIndex);
 			parameters[param1Index].result = result;
