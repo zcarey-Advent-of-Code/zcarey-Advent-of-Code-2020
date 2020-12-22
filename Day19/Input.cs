@@ -16,13 +16,24 @@ namespace Day19 {
 
 		public void Parse(string[] input) {
 			foreach(string line in input) {
-				int index = line.IndexOf(':');
-				if(index >= 0) {
-					Rule rule = Rule.Parse(line, index);
+				Rule rule = ParseRule(line);
+				/*if(rule != null) {
 					Rules[rule.ID] = rule;
-				} else {
+				} else {*/
+				if(rule == null) { 
 					messages.Add(line);
 				}
+			}
+		}
+
+		public Rule ParseRule(string line) {
+			int index = line.IndexOf(':');
+			if (index >= 0) {
+				Rule rule = Rule.Parse(line, index);
+				Rules[rule.ID] = rule;
+				return rule;
+			} else {
+				return null;
 			}
 		}
 
