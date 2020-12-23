@@ -24,6 +24,8 @@ namespace Day19 {
 		}
 
 		protected abstract bool match(Dictionary<int, Rule> rules, string message, ref int index);
+
+		//"match2" is almost the same as "match" except there is no "early exit" so if a check fails we can still check if it failed past the end of the message
 		protected abstract bool match2(Dictionary<int, Rule> rules, string message, ref int index);
 
 		public static Rule Parse(string input, int index) {
@@ -103,24 +105,6 @@ namespace Day19 {
 					//Assume rule 0 only has 2 rules
 					MultiRule rule1 = (MultiRule)rules[requiredRules[0]];
 					MultiRule rule2 = (MultiRule)rules[requiredRules[1]];
-					/*for(int firstRuleMatches = 1; ; firstRuleMatches++) {
-						index = 0;
-						if(!rule1.matchLooping(rules, message, ref index, firstRuleMatches)){
-							//Once the first rule doesn't match (after a certain number of loops) we know the entire message doesn't match
-							return false;
-						}
-						int baseIndex = index;
-						for(int secondRuleMatches = 1; ; secondRuleMatches++) {
-							index = baseIndex; //Reset the index to the end of rule1 matches
-							if (rule2.matchLooping(rules, message, ref index, secondRuleMatches)) {
-								if(index == message.Length) {
-									return true;
-								}
-							} else {
-								break;
-							}
-						}
-					}*/
 					for (int firstRuleMatches = 0; ; firstRuleMatches++) {
 						index = 0;
 						if (!rule1.matchLooping(rules, message, ref index, firstRuleMatches)) {
@@ -132,7 +116,6 @@ namespace Day19 {
 						}
 						int baseIndex = index;
 						for (int secondRuleMatches = 0; ; secondRuleMatches++) {
-							//if (firstRuleMatches < 0 && secondRuleMatches < 0) continue;
 							index = baseIndex; //Reset the index to the end of rule1 matches
 							if (rule2.matchLooping(rules, message, ref index, secondRuleMatches)) {
 								if (index == message.Length) {
@@ -147,9 +130,6 @@ namespace Day19 {
 							}
 						}
 					}
-					//if (!rules[requiredRules[0]].match2(rules, message, ref index)) return false; //Need to
-					//return false;
-					//return matchRule1(rules, message, ref index);
 				} else {
 					bool result = true;
 					foreach (int ruleId in requiredRules) {
@@ -159,50 +139,7 @@ namespace Day19 {
 					}
 					return result;
 				}
-				/*int lastIndex = index;
-				foreach (int ruleId in requiredRules) {
-					Rule rule = rules[ruleId];
-					if (rule.Looping) { 
-						while(rule.match2(rules, message, ref index)) {
-							lastIndex = index;
-						}
-						index = lastIndex;
-					} else {
-						if (!rule.match2(rules, message, ref index)) {
-							return false;
-						}
-					}
-				}
-				return true;*/
 			}
-
-			/*private bool matchRule1(Dictionary<int, Rule> rules, string message, ref int index) {
-				int baseIndex = index;
-				if(rules[requiredRules[0]].match2(rules, message, ref index)) {
-					//Base case
-					if (index >= message.Length) return false; //The first rule can't complete the message
-					if (matchRule1(rules, message, ref index)) return true;
-				}
-
-				if(matchRule2(rules, message, ref baseIndex)) {
-					index = baseIndex;
-					return true;
-				} else {
-					return false;
-				}
-			}
-
-			private bool matchRule2(Dictionary<int, Rule> rules, string message, ref int index) {
-				if(rules[requiredRules[1]].match2(rules, message, ref index)) {
-					if (index == message.Length) return true;
-					else if (index > message.Length) return false;
-					else {
-						if (matchRule2(rules, message, ref index)) return true;
-					}
-				} 
-				
-				return false;
-			}*/
 		}
 
 		private class MultiRule : Rule {
@@ -228,40 +165,10 @@ namespace Day19 {
 				//if (repeats < 1) return false;
 				//Going with the assumption that is the rule is marked as "looping" that there are only 2 rules:
 				//The first one is the "base" rule, and the second rule is the "base rule" followed by a loop back to this rule.
-				//With that assumption, this function is programmed so that it ignores the second rule and just loops the first rule as needed.
+				//With that assumption, only the first rule is checked when checking for a match
 				if (Looping) {
-					/*bool matchedOnce = false;
-					int lastIndex = index;
-					while (true) {
-						if(ruleGroups[0].match2(rules, message, ref index)) {
-							lastIndex = index;
-							matchedOnce = true;
-							if(index == message.Length) {
-								return true; //We did it!!
-							}
-						} else {
-							something;
-							break;
-						}
-					}
-					return matchedOnce;*/
 					return ruleGroups[0].match2(rules, message, ref index);
 				} else {
-					//if (repeats != 1) return false;
-					/*foreach (Rule rule in ruleGroups) {
-						int ruleIndex = index;
-						if (rule.Looping) {
-							if(rule.match2(rules, message, ref ruleIndex)) {
-								index = ruleIndex
-							}
-						} else {
-							if (rule.match2(rules, message, ref ruleIndex)) {
-								index = ruleIndex;
-								return true;
-							}
-						}
-					}
-					return false;*/
 					int baseIndex = index;
 					foreach (Rule rule in ruleGroups) {
 						index = baseIndex;
