@@ -81,27 +81,83 @@ namespace Day19 {
 
 			public bool matchLooping(Dictionary<int, Rule> rules, string message, ref int index, int baseId, int depth) {
 				if (!Looping) return false;
-				if (depth == 0) return true; //Base case
+				if (depth < 0) return true; //Base case
+				bool result = true;
 				foreach(int ruleId in requiredRules) {
 					if(ruleId == baseId) {
 						if(!matchLooping(rules, message, ref index, baseId, depth - 1)){
-							return false;
+							result = false;
 						}
 					} else {
 						if(!rules[ruleId].match2(rules, message, ref index)) {
-							return false;
+							result = false;
 						}
 					}
 				}
-				return true;
+				return result;
 			}
 
 			protected override bool match2(Dictionary<int, Rule> rules, string message, ref int index) {
 				//To match this rule in Part2, each looping rule is matched as many times as possible before returning
 				if(ID == 0) {
+					//Assume rule 0 only has 2 rules
+					MultiRule rule1 = (MultiRule)rules[requiredRules[0]];
+					MultiRule rule2 = (MultiRule)rules[requiredRules[1]];
+					/*for(int firstRuleMatches = 1; ; firstRuleMatches++) {
+						index = 0;
+						if(!rule1.matchLooping(rules, message, ref index, firstRuleMatches)){
+							//Once the first rule doesn't match (after a certain number of loops) we know the entire message doesn't match
+							return false;
+						}
+						int baseIndex = index;
+						for(int secondRuleMatches = 1; ; secondRuleMatches++) {
+							index = baseIndex; //Reset the index to the end of rule1 matches
+							if (rule2.matchLooping(rules, message, ref index, secondRuleMatches)) {
+								if(index == message.Length) {
+									return true;
+								}
+							} else {
+								break;
+							}
+						}
+					}*/
+					for (int firstRuleMatches = 0; ; firstRuleMatches++) {
+						index = 0;
+						if (!rule1.matchLooping(rules, message, ref index, firstRuleMatches)) {
+							if (index >= message.Length) {
+								return false;
+							} else {
+								continue; //Try more!!!
+							}
+						}
+						int baseIndex = index;
+						for (int secondRuleMatches = 0; ; secondRuleMatches++) {
+							//if (firstRuleMatches < 0 && secondRuleMatches < 0) continue;
+							index = baseIndex; //Reset the index to the end of rule1 matches
+							if (rule2.matchLooping(rules, message, ref index, secondRuleMatches)) {
+								if (index == message.Length) {
+									return true;
+								}
+							} else {
+								if(index >= message.Length) {
+									break;
+								} else {
+									continue;
+								}
+							}
+						}
+					}
+					//if (!rules[requiredRules[0]].match2(rules, message, ref index)) return false; //Need to
+					//return false;
 					//return matchRule1(rules, message, ref index);
 				} else {
-					return this.match(rules, message, ref index);
+					bool result = true;
+					foreach (int ruleId in requiredRules) {
+						if (!rules[ruleId].match2(rules, message, ref index)) {
+							result = false;
+						}
+					}
+					return result;
 				}
 				/*int lastIndex = index;
 				foreach (int ruleId in requiredRules) {
@@ -150,7 +206,7 @@ namespace Day19 {
 		}
 
 		private class MultiRule : Rule {
-			private Rule[] ruleGroups;
+			private StandardRule[] ruleGroups;
 
 			public MultiRule(int ID, string input) : base(ID) {
 				ruleGroups = input.Split('|').Select(x => new StandardRule(-1, x.Trim(), ID)).ToArray();
@@ -206,8 +262,20 @@ namespace Day19 {
 						}
 					}
 					return false;*/
-					return this.match(rules, message, ref index);
+					int baseIndex = index;
+					foreach (Rule rule in ruleGroups) {
+						index = baseIndex;
+						if (rule.match2(rules, message, ref index)) {
+							return true;
+						}
+					}
+					return false;
 				}
+			}
+
+			public bool matchLooping(Dictionary<int, Rule> rules, string message, ref int index, int depth) {
+				if (!Looping) throw new Exception("Not a looping rule."); //return false;
+				return ruleGroups[1].matchLooping(rules, message, ref index, this.ID, depth);
 			}
 		}
 
