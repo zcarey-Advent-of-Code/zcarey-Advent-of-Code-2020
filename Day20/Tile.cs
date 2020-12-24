@@ -9,6 +9,12 @@ namespace Day20 {
 		public int ID { get; private set; }
 		public int Size { get; private set; }
 
+		public Operation Operation { get; set; } = Operation.Original;
+		public IEnumerable<bool> Top { get => getTop(Operation.Transpose, Operation.FlipVertical, Operation.FlipHorizontal); }
+		public IEnumerable<bool> Bottom { get => getBottom(Operation.Transpose, Operation.FlipVertical, Operation.FlipHorizontal); }
+		public IEnumerable<bool> Left { get => getLeft(Operation.Transpose, Operation.FlipVertical, Operation.FlipHorizontal); }
+		public IEnumerable<bool> Right { get => getRight(Operation.Transpose, Operation.FlipVertical, Operation.FlipHorizontal); }
+
 		private bool[] boarder;
 
 		public void Parse(string[] input) {
@@ -43,8 +49,9 @@ namespace Day20 {
 		private IEnumerable<bool> left { get => boarder.Skip(3 * Size).Take(Size); }
 		private IEnumerable<bool> right { get => boarder.Skip(Size).Take(Size); }
 
-		public IEnumerable<bool> Top(Operation op) { return Top(op.Transpose, op.FlipVertical, op.FlipHorizontal); }
-		public IEnumerable<bool> Top(bool Transpose, bool FlipVertical, bool FlipHorizontal) {
+		//private IEnumerable<bool> getTop() => top;
+		//private IEnumerable<bool> getTop(Operation op) { return Top(op.Transpose, op.FlipVertical, op.FlipHorizontal); }
+		private IEnumerable<bool> getTop(bool Transpose, bool FlipVertical, bool FlipHorizontal) {
 			IEnumerable<bool> source;
 			if (Transpose) {
 				source = (FlipVertical ? right : left);
@@ -54,8 +61,9 @@ namespace Day20 {
 			return FlipHorizontal ? source.Reverse() : source;
 		}
 
-		public IEnumerable<bool> Bottom(Operation op) { return Bottom(op.Transpose, op.FlipVertical, op.FlipHorizontal); }
-		public IEnumerable<bool> Bottom(bool Transpose, bool FlipVertical, bool FlipHorizontal) {
+		//private IEnumerable<bool> getBottom() => bottom;
+		//private IEnumerable<bool> getBottom(Operation op) { return Bottom(op.Transpose, op.FlipVertical, op.FlipHorizontal); }
+		private IEnumerable<bool> getBottom(bool Transpose, bool FlipVertical, bool FlipHorizontal) {
 			IEnumerable<bool> source;
 			if (Transpose) {
 				source = (FlipVertical ? left : right);
@@ -65,8 +73,9 @@ namespace Day20 {
 			return FlipHorizontal ? source.Reverse() : source;
 		}
 
-		public IEnumerable<bool> Left(Operation op) { return Left(op.Transpose, op.FlipVertical, op.FlipHorizontal); }
-		public IEnumerable<bool> Left(bool Transpose, bool FlipVertical, bool FlipHorizontal) {
+		//private IEnumerable<bool> getLeft() => left;
+		//private IEnumerable<bool> getLeft(Operation op) { return Left(op.Transpose, op.FlipVertical, op.FlipHorizontal); }
+		private IEnumerable<bool> getLeft(bool Transpose, bool FlipVertical, bool FlipHorizontal) {
 			IEnumerable<bool> source;
 			if (Transpose) {
 				source = (FlipHorizontal ? bottom : top);
@@ -76,8 +85,9 @@ namespace Day20 {
 			return FlipVertical ? source.Reverse() : source;
 		}
 
-		public IEnumerable<bool> Right(Operation op) { return Right(op.Transpose, op.FlipVertical, op.FlipHorizontal); }
-		public IEnumerable<bool> Right(bool Transpose, bool FlipVertical, bool FlipHorizontal) {
+		//private IEnumerable<bool> getRight() => right;
+		//private IEnumerable<bool> getRight(Operation op) { return Right(op.Transpose, op.FlipVertical, op.FlipHorizontal); }
+		private IEnumerable<bool> getRight(bool Transpose, bool FlipVertical, bool FlipHorizontal) {
 			IEnumerable<bool> source;
 			if (Transpose) {
 				source = (FlipHorizontal ? top : bottom);
