@@ -15,9 +15,9 @@ namespace Day20 {
 		public static readonly Operation RotatedHorizontalFlip = new Operation(true, false, false);
 
 		public static IEnumerable<Operation> GetAllOperations() {
-			for (int x = 0; x < 1; x++) {
-				for (int y = 0; y < 1; y++) {
-					for (int z = 0; z < 1; z++) {
+			for (int x = 0; x <= 1; x++) {
+				for (int y = 0; y <= 1; y++) {
+					for (int z = 0; z <= 1; z++) {
 						yield return new Operation(x == 1, y == 1, z == 1);
 					}
 				}

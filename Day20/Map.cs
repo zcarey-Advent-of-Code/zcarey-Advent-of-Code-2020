@@ -6,7 +6,6 @@ using System.Linq;
 namespace Day20 {
 	class Map {
 
-		//private Dictionary<Point, Tile> map = new Dictionary<Point, Tile>();
 		private Tile[,] map;
 		public int Size { get; private set; }
 
@@ -26,16 +25,9 @@ namespace Day20 {
 				} else {
 					return null;
 				}
-				/*Tile result;
-				if(map.TryGetValue(key, out result)){
-					return result;
-				} else {
-					return null;
-				}*/
 			}
 
 			set {
-				//map[key] = value;
 				map[key.X, key.Y] = value;
 			}
 		}
@@ -76,79 +68,5 @@ namespace Day20 {
 			}
 		}
 
-		/*internal Rectangle GetBounds() {
-			IEnumerable<Point> tiles = map.Where(x => x.Value != null).Select(x => x.Key);
-			Point first = tiles.First();
-			int left = first.X;
-			int right = first.X;
-			int top = first.Y;
-			int bottom = first.Y;
-			foreach(Point tile in tiles.Skip(1)) {
-				left = Math.Min(left, tile.X);
-				right = Math.Max(right, tile.X);
-				top = Math.Min(top, tile.Y);
-				bottom = Math.Max(bottom, tile.Y);
-			}
-			return new Rectangle(left, top, right - left, bottom - top);
-		}
-
-		internal bool TilesInASquare() {
-			IEnumerable<Point> tiles = map.Where(x => x.Value != null).Select(x => x.Key);
-
-			//Find the left and right of the first row
-			Point first = tiles.First();
-			int left = first.X;
-			int right = first.X;
-			while(this[left - 1, first.Y] != null) {
-				left = left - 1;
-			}
-			while (this[left + 1, first.Y] != null) {
-				right = right + 1;
-			}
-
-			//Check rows above
-			for(int y = first.Y - 1; ; y--) {
-				bool allTilesPresent = true;
-				bool atLeastOneTileFound = false;
-				if ((this[left - 1, y] != null) || (this[right + 1, y] != null)) return false;
-				for(int x = left; x <= right; x++) {
-					if(this[x, y] != null) {
-						atLeastOneTileFound = true;
-					} else {
-						allTilesPresent = false;
-					}
-				}
-				if (!allTilesPresent) {
-					if (atLeastOneTileFound) {
-						return false;
-					} else {
-						break;
-					}
-				}
-			}
-
-			//Check rows below
-			for (int y = first.Y + 1; ; y++) {
-				bool allTilesPresent = true;
-				bool atLeastOneTileFound = false;
-				if ((this[left - 1, y] != null) || (this[right + 1, y] != null)) return false;
-				for (int x = left; x <= right; x++) {
-					if (this[x, y] != null) {
-						atLeastOneTileFound = true;
-					} else {
-						allTilesPresent = false;
-					}
-				}
-				if (!allTilesPresent) {
-					if (atLeastOneTileFound) {
-						return false;
-					} else {
-						break;
-					}
-				}
-			}
-
-			return true;
-		}*/
 	}
 }
