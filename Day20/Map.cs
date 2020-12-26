@@ -6,23 +6,37 @@ using System.Linq;
 namespace Day20 {
 	class Map {
 
-		private Dictionary<Point, Tile> map = new Dictionary<Point, Tile>();
+		//private Dictionary<Point, Tile> map = new Dictionary<Point, Tile>();
+		private Tile[,] map;
+		public int Size { get; private set; }
 
-		public Map() {
+		public Map(int size) {
+			this.map = new Tile[size, size];
+			this.Size = size;
+		}
+
+		private bool isValidKey(Point key) {
+			return (key.X >= 0) && (key.Y >= 0) && (key.X < Size) && (key.Y < Size);
 		}
 
 		public Tile this[Point key]{
 			get {
-				Tile result;
+				if (isValidKey(key)) {
+					return map[key.X, key.Y];
+				} else {
+					return null;
+				}
+				/*Tile result;
 				if(map.TryGetValue(key, out result)){
 					return result;
 				} else {
 					return null;
-				}
+				}*/
 			}
 
 			set {
-				map[key] = value;
+				//map[key] = value;
+				map[key.X, key.Y] = value;
 			}
 		}
 
@@ -32,7 +46,7 @@ namespace Day20 {
 		}
 
 		public bool ValidTileLocation(Point loc, Tile tile) {
-			if (this[loc] != null) return false;
+			if (!isValidKey(loc) || (this[loc] != null)) return false;
 
 			//Check Up
 			Tile up = this[loc.X, loc.Y - 1];
@@ -53,7 +67,16 @@ namespace Day20 {
 			return true;
 		}
 
-		internal Rectangle GetBounds() {
+		public IEnumerable<Tile> Corners {
+			get {
+				yield return map[0, 0];
+				yield return map[Size - 1, 0];
+				yield return map[Size - 1, Size - 1];
+				yield return map[0, Size - 1];
+			}
+		}
+
+		/*internal Rectangle GetBounds() {
 			IEnumerable<Point> tiles = map.Where(x => x.Value != null).Select(x => x.Key);
 			Point first = tiles.First();
 			int left = first.X;
@@ -126,6 +149,6 @@ namespace Day20 {
 			}
 
 			return true;
-		}
+		}*/
 	}
 }
