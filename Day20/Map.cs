@@ -8,6 +8,7 @@ namespace Day20 {
 
 		private Tile[,] map;
 		public int Size { get; private set; }
+		public Image Image { get => new Image(map, Size); }
 
 		public Map(int size) {
 			this.map = new Tile[size, size];

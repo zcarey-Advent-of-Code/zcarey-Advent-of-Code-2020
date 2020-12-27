@@ -9,10 +9,11 @@ namespace Day20 {
 	class Program : BlockParsedInputProgramStructure<Tile> {
 
 		static Operation[] ValidOperations = Operation.GetAllOperations().ToArray();
+		static Map solvedMap;
 
 		static void Main(string[] args) {
-			new Program().Run("input.txt");
-			//new Program().Run("Example.txt");
+			//new Program().Run("input.txt");
+			new Program().Run("Example.txt");
 		}
 
 		protected override string CalculatePart1(Tile[] input) {
@@ -22,6 +23,7 @@ namespace Day20 {
 			if (!placeTile(map, new List<Tile>(input), new Point())) {
 				throw new Exception("Could not solve!");
 			}
+			solvedMap = map;
 
 			return map.Corners.Select(x => new BigInteger(x.ID)).Aggregate((x, y) => x * y).ToString();
 		}
@@ -54,7 +56,29 @@ namespace Day20 {
 		}
 
 		protected override string CalculatePart2(Tile[] input) {
-			return "null";
+			//"Cheating" on run time by using using the result from Part1
+			if (solvedMap == null) CalculatePart1(input);
+			Image image = solvedMap.Image;
+			Pattern pattern = Pattern.SeaMonster;
+			bool[,] result = new bool[image.Size, image.Size];
+
+			//Find all the sea monsters and mark them in our result
+			foreach(Point p in image) {
+				pattern.Origin = p;
+				foreach(Operation op in ValidOperations) {
+					pattern.Operation = op;
+					if (pattern.Match(image)) {
+						pattern.Or(result);
+					}
+				}
+			}
+
+			//Now our result is any space marked as a wave in the original image and not a sea monster in our current results
+			foreach(Point p in image) {
+				result[p.X, p.Y] = image[p] && !result[p.X, p.Y];
+			}
+
+			return result.Values().Where(x => x == true).Count().ToString();
 		}
 	}
 }

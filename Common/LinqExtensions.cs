@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Text;
 
 namespace Common {
@@ -46,5 +47,20 @@ namespace Common {
 			yield return newElement;
 		}
 
+		public static IEnumerable<Point> Indices<T>(this T[,] source) {
+			for(int i = 0; i < source.GetLength(0); i++) {
+				for(int j = 0; j < source.GetLength(1); j++) {
+					yield return new Point(i, j);
+				}
+			}
+		}
+
+		public static IEnumerable<T> Values<T>(this T[,] source) {
+			for (int i = 0; i < source.GetLength(0); i++) {
+				for (int j = 0; j < source.GetLength(1); j++) {
+					yield return source[i, j];
+				}
+			}
+		}
 	}
 }

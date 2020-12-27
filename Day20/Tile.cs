@@ -16,10 +16,12 @@ namespace Day20 {
 		public IEnumerable<bool> Right { get => getRight(Operation.Transpose, Operation.FlipVertical, Operation.FlipHorizontal); }
 
 		private bool[] boarder;
+		private bool[] all;
 
 		public void Parse(string[] input) {
 			ID = int.Parse(input[0].Split()[1].TrimEnd(':')); //Ex. "Tile 3079:"
 			Size = input.Length - 1;
+			all = input.Skip(1).SelectMany(x => x.Select(y => y == '#')).ToArray();
 			boarder = new bool[Size * 4];
 
 			int index = 0;
@@ -41,6 +43,12 @@ namespace Day20 {
 			//Left
 			for (int y = 0; y < Size; y++) {
 				boarder[index++] = (input[y + 1][0] == '#');
+			}
+		}
+
+		public bool this[int x, int y] {
+			get {
+				return all[y * Size + x];
 			}
 		}
 
