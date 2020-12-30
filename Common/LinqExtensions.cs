@@ -48,17 +48,17 @@ namespace Common {
 		}
 
 		public static IEnumerable<Point> Indices<T>(this T[,] source) {
-			for(int i = 0; i < source.GetLength(0); i++) {
-				for(int j = 0; j < source.GetLength(1); j++) {
-					yield return new Point(i, j);
+			for(int y = 0; y < source.GetLength(1); y++) {
+				for(int x = 0; x < source.GetLength(0); x++) {
+					yield return new Point(x, y);
 				}
 			}
 		}
 
 		public static IEnumerable<T> Values<T>(this T[,] source) {
-			for (int i = 0; i < source.GetLength(0); i++) {
-				for (int j = 0; j < source.GetLength(1); j++) {
-					yield return source[i, j];
+			for (int y = 0; y < source.GetLength(1); y++) {
+				for (int x = 0; x < source.GetLength(0); x++) {
+					yield return source[x, y];
 				}
 			}
 		}

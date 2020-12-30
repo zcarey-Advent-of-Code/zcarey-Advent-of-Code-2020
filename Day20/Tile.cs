@@ -1,6 +1,7 @@
 ﻿using Common;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace Day20 {
@@ -48,7 +49,17 @@ namespace Day20 {
 
 		public bool this[int x, int y] {
 			get {
-				return all[y * Size + x];
+				Point p = new Point(x, y);
+				if (this.Operation.Transpose) {
+					p = new Point(p.Y, p.X);
+				}
+				if (this.Operation.FlipVertical) {
+					p = new Point(p.X, Size - p.Y - 1);
+				}
+				if (this.Operation.FlipHorizontal) {
+					p = new Point(Size - p.X - 1, p.Y);
+				}
+				return all[p.Y * Size + p.X];
 			}
 		}
 

@@ -34,5 +34,13 @@ namespace Day20 {
 			this.FlipHorizontal = H;
 		}
 
+		public static bool operator ==(Operation left, Operation right) {
+			return (left.Transpose == right.Transpose) && (left.FlipVertical == right.FlipVertical) && (left.FlipHorizontal == right.FlipHorizontal);
+		}
+
+		public static bool operator !=(Operation left, Operation right) {
+			return (left.Transpose != right.Transpose) || (left.FlipVertical != right.FlipVertical) || (left.FlipHorizontal != right.FlipHorizontal);
+		}
+
 	}
 }

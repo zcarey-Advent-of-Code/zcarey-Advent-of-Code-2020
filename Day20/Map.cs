@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 
 namespace Day20 {
 	class Map {
@@ -67,6 +68,28 @@ namespace Day20 {
 				yield return map[Size - 1, Size - 1];
 				yield return map[0, Size - 1];
 			}
+		}
+
+		public override string ToString() {
+			StringBuilder sb = new StringBuilder();
+			for(int tiley = 0; tiley < Size; tiley++) {
+				for(int y = 0; y < map[0, 0].Size; y++) {
+					for (int tilex = 0; tilex < Size; tilex++) {
+						for (int x = 0; x < map[0, 0].Size; x++) {
+							sb.Append(map[tilex, tiley][x, y] ? '#' : '.');
+						}
+						if (tilex == (Size - 1)) {
+							sb.AppendLine();
+						} else {
+							sb.Append(' ');
+						}
+					}
+				}
+				if(tiley < (Size - 1)) {
+					sb.AppendLine();
+				}
+			}
+			return sb.ToString();
 		}
 
 	}
