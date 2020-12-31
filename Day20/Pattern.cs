@@ -16,7 +16,6 @@ namespace Day20 {
 		});
 
 		public Point Origin { get; set; }
-		//public Operation Operation { get; set; }
 		public Size Area { get => new Size(Width, Height); }
 		public int Width { get; private set; }
 		public int Height { get; private set; }
@@ -41,56 +40,19 @@ namespace Day20 {
 			}
 		}
 
-		public void Or(bool[,] data, Operation dataOp) {
-			foreach(Point p in getPatternPoints()) {
-				Point o = new Point(this.Origin.X + p.X, this.Origin.Y + p.Y);
-				if (dataOp.Transpose) o = new Point(o.Y, o.X);
-				if (dataOp.FlipVertical) o = new Point(o.X, data.GetLength(1) - o.Y - 1);
-				if (dataOp.FlipHorizontal) o = new Point(data.GetLength(0) - o.X - 1, o.Y);
-				data[o.X, o.Y] |= this.pattern[p.X, p.Y];
-				//data[p.X, p.Y] |= (Operation.Transpose ? this.pattern[p.Y, p.X] : this.pattern[p.X, p.Y]);
-			}
-		}
-
 		public void Or(SquareImage<bool> data) {
-			foreach (Point p in getPatternPoints()) {
+			foreach (Point p in pattern.Indices()) {
 				data[Origin.X + p.X, Origin.Y + p.Y] |= this.pattern[p.X, p.Y];
 			}
 		}
 
 		public bool Match(SquareImage<bool> image) {
-			/*Size area;
-			IEnumerable<Point> points = getPatternPoints(out area);
-			IEnumerable<bool> data;
-			if (Operation.Transpose) {
-				data = points.Select(p => pattern[p.Y, p.X]);
-			} else {
-				data = points.Select(p => pattern[p.X, p.Y]);
-			}*/
-
-			/*return image.GetRegion(Origin, this.Area).SequenceEqual(getPatternPoints().Select(p => {
-				bool debug = pattern[p.X, p.Y];
-				return debug;
-			}));*/
-			/*return image.GetRegion(Origin, this.Area).SequenceEqual(getPatternPoints().Select(p => {
-				bool debug = pattern[p.X, p.Y];
-				return debug;
-			}), new PatternComparer());*/
 			Rectangle region = new Rectangle(Origin, this.Area);
 			if (!image.RegionWithinBounds(region)) return false;
-			return image[region].SequenceEqual(getPatternPoints().Select(p => {
+			return image[region].SequenceEqual(pattern.Indices().Select(p => {
 				bool debug = pattern[p.X, p.Y];
 				return debug;
 			}), new PatternComparer());
-		}
-
-		private IEnumerable<Point> getPatternPoints(/*out Size area*/) {
-			//area = (Operation.Transpose ? new Size(Height, Width) : this.Area);
-			IEnumerable<Point> points = pattern.Indices(); //GetBasePoints();
-			/*points = ApplyTranspose(points);
-			points = ApplyVFlip(points, area);
-			points = ApplyHFlip(points, area);*/
-			return points;
 		}
 
 		//NOTE: The first sequence should be the image and the second sequence should be the pattern
@@ -105,37 +67,5 @@ namespace Day20 {
 			}
 		}
 
-		/*private IEnumerable<Point> GetBasePoints() {
-			for (int y = 0; y < Height; y++) {
-				for (int x = 0; x < Width; x++) {
-					yield return new Point(x, y);
-				}
-			}
-		}*/
-		/*
-				private IEnumerable<Point> ApplyTranspose(IEnumerable<Point> data) {
-					if (this.Operation.Transpose) {
-						return data.Select(p => new Point(p.Y, p.X));
-					} else {
-						return data;
-					}
-				}
-
-				private IEnumerable<Point> ApplyVFlip(IEnumerable<Point> data, Size area) {
-					if (this.Operation.FlipVertical) {
-						return data.Select(p => new Point(p.X, area.Height - p.Y - 1));
-					} else {
-						return data;
-					}
-				}
-
-				private IEnumerable<Point> ApplyHFlip(IEnumerable<Point> data, Size area) {
-					if (this.Operation.FlipHorizontal) {
-						return data.Select(p => new Point(area.Width - p.X - 1, p.Y));
-					} else {
-						return data;
-					}
-				}
-		*/
 	}
 }
