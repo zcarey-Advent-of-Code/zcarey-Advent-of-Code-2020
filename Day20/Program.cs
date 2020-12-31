@@ -6,7 +6,7 @@ using System.Linq;
 using System.Numerics;
 
 namespace Day20 {
-	class Program : BlockParsedInputProgramStructure<Tile> {
+	class Program : BlockParsedInputProgramStructure<Input> {
 
 		static Operation[] ValidOperations = Operation.GetAllOperations().ToArray();
 		/*static Operation[] ValidOperations = {
@@ -19,14 +19,15 @@ namespace Day20 {
 		static Map solvedMap;
 
 		static void Main(string[] args) {
-			//new Program().Run("input.txt");
-			new Program().Run("Example.txt");
+			new Program().Run("input.txt");
+			//new Program().Run("Example.txt");
 		}
 
-		protected override string CalculatePart1(Tile[] input) {
+		protected override string CalculatePart1(Input[] input) {
 			int size = (int)Math.Sqrt(input.Length);
 			if ((size * size) != input.Length) throw new Exception("Tiles can't form a square!");
 			Map map = new Map(size);
+			List<Tile> tiles = input.Select(x => x.Tile).ToList();
 			/*Tile test1 = input.Where(x => x.ID == 1951).First();
 			test1.Operation = Operation.VerticalFlip;
 			map[0, 0] = test1;
@@ -37,7 +38,7 @@ namespace Day20 {
 			test3.Operation = Operation.Original;
 			map[2, 0] = test3;
 			List<Tile> tiles = input.Where(x => (x.ID != 1951) && (x.ID != 2311) && (x.ID != 3079)).ToList();*/
-			if (!placeTile(map, /*tiles*/new List<Tile>(input), new Point(0,0))) {
+			if (!placeTile(map, tiles, new Point(0,0))) {
 				throw new Exception("Could not solve!");
 			}
 			solvedMap = map;
@@ -59,7 +60,7 @@ namespace Day20 {
 				List<Tile> remaining = tiles.Where(x => x != tile).ToList();
 
 				foreach (Operation op in ValidOperations) {
-					tile.Operation = op;
+					tile.Transform = op;
 					if (map.ValidTileLocation(location, tile)) {
 						map[location] = tile;
 						Point nextLocation = new Point(location.X + 1, location.Y);
@@ -73,14 +74,14 @@ namespace Day20 {
 			return false;
 		}
 
-		protected override string CalculatePart2(Tile[] input) {
+		protected override string CalculatePart2(Input[] input) {
 			//"Cheating" on run time by using using the result from Part1
 			if (solvedMap == null) CalculatePart1(input);
-			Image image = solvedMap.Image;
+			SquareImage<bool> image = solvedMap.GetImage(); //Image image = solvedMap.Image;
 			Pattern pattern = Pattern.SeaMonster;
-			bool[,] result = new bool[image.Size, image.Size];
-	Console.WriteLine(image);
-			//Find all the sea monsters and mark them in our result
+			SquareImage<bool> result = new SquareImage<bool>(image.Size); //bool[,] result = new bool[image.Size, image.Size];
+																		  //Console.WriteLine(image);
+																		  //Find all the sea monsters and mark them in our result
 			/*foreach(Point p in image) {
 				pattern.Origin = p;
 				foreach(Operation op in ValidOperations) {
@@ -90,16 +91,26 @@ namespace Day20 {
 					}
 				}
 			}*/
-			foreach(Operation op in ValidOperations) {
-				image.Operation = op;
-				foreach(Point p in image) {
+			/*			foreach(Operation op in ValidOperations) {
+							image.Transform = op;
+							foreach(Point p in image) {
+								pattern.Origin = p;
+								if (pattern.Match(image)) {
+									pattern.Or(result, op);
+								}
+							}
+						}*/
+			foreach (Operation op in ValidOperations) {
+				image.Transform = op;
+				result.Transform = op;
+				foreach (Point p in image.GetIndices()) {
 					pattern.Origin = p;
 					if (pattern.Match(image)) {
-						pattern.Or(result, op);
+						pattern.Or(result);
 					}
 				}
 			}
-
+/*
 			Console.WriteLine();
 			Console.WriteLine();
 			Console.WriteLine();
@@ -132,25 +143,26 @@ namespace Day20 {
 			}
 			Console.WriteLine();
 			Console.WriteLine();
-
+*/
 			//Now our result is any space marked as a wave in the original image and not a sea monster in our current results
-			image.Operation = Operation.Original;
-			foreach (Point p in image) {
-				result[p.X, p.Y] = image[p] && !result[p.X, p.Y];
+			//image.Operation = Operation.Original;
+			foreach (Point p in image.GetIndices()) {
+				result[p] = image[p] && !result[p];
 			}
-
-			for(int y = 0; y < image.Size; y++) {
-				for(int x = 0; x < image.Size; x++) {
-					Point p = new Point(x, y);
-					if (opp.Transpose) p = new Point(p.Y, p.X);
-					if (opp.FlipVertical) p = new Point(p.X, image.Size - p.Y - 1);
-					if (opp.FlipHorizontal) p = new Point(image.Size - p.X - 1, p.Y);
-					Console.Write(result[p.X, p.Y] ? '#' : '.');
-				}
-				Console.WriteLine();
-			}
-
-			return result.Values().Where(x => x == true).Count().ToString();
+			/*
+						for(int y = 0; y < image.Size; y++) {
+							for(int x = 0; x < image.Size; x++) {
+								Point p = new Point(x, y);
+								if (opp.Transpose) p = new Point(p.Y, p.X);
+								if (opp.FlipVertical) p = new Point(p.X, image.Size - p.Y - 1);
+								if (opp.FlipHorizontal) p = new Point(image.Size - p.X - 1, p.Y);
+								Console.Write(result[p.X, p.Y] ? '#' : '.');
+							}
+							Console.WriteLine();
+						}
+			*/
+			//			return result.Values().Where(x => x == true).Count().ToString();
+			return result.GetData().Count(x => x == true).ToString();
 		}
 	}
 }

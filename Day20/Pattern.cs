@@ -52,7 +52,13 @@ namespace Day20 {
 			}
 		}
 
-		public bool Match(Image image) {
+		public void Or(SquareImage<bool> data) {
+			foreach (Point p in getPatternPoints()) {
+				data[Origin.X + p.X, Origin.Y + p.Y] |= this.pattern[p.X, p.Y];
+			}
+		}
+
+		public bool Match(SquareImage<bool> image) {
 			/*Size area;
 			IEnumerable<Point> points = getPatternPoints(out area);
 			IEnumerable<bool> data;
@@ -66,7 +72,13 @@ namespace Day20 {
 				bool debug = pattern[p.X, p.Y];
 				return debug;
 			}));*/
-			return image.GetRegion(Origin, this.Area).SequenceEqual(getPatternPoints().Select(p => {
+			/*return image.GetRegion(Origin, this.Area).SequenceEqual(getPatternPoints().Select(p => {
+				bool debug = pattern[p.X, p.Y];
+				return debug;
+			}), new PatternComparer());*/
+			Rectangle region = new Rectangle(Origin, this.Area);
+			if (!image.RegionWithinBounds(region)) return false;
+			return image[region].SequenceEqual(getPatternPoints().Select(p => {
 				bool debug = pattern[p.X, p.Y];
 				return debug;
 			}), new PatternComparer());

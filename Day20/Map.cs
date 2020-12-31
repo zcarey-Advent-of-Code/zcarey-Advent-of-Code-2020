@@ -9,7 +9,7 @@ namespace Day20 {
 
 		private Tile[,] map;
 		public int Size { get; private set; }
-		public Image Image { get => new Image(map, Size); }
+		//public Image Image { get => new Image(map, Size); }
 
 		public Map(int size) {
 			this.map = new Tile[size, size];
@@ -68,6 +68,18 @@ namespace Day20 {
 				yield return map[Size - 1, Size - 1];
 				yield return map[0, Size - 1];
 			}
+		}
+
+		//Removes the boarders from each tile and combines the result into one image
+		public SquareImage<bool> GetImage() {
+			int tileSize = this[0, 0].Size - 2;
+			SquareImage<bool> result = new SquareImage<bool>(Size * tileSize);
+			for(int y = 0; y < Size; y++) {
+				for(int x = 0; x < Size; x++) {
+					result[new Rectangle(x * tileSize, y * tileSize, tileSize, tileSize)] = this[x, y][new Rectangle(1, 1, tileSize, tileSize)];
+				}
+			}
+			return result;
 		}
 
 		public override string ToString() {

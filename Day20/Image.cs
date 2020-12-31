@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 
 namespace Day20 {
-	class Image : IEnumerable<Point> {
+/*	class Image : IEnumerable<Point> {
 
 		public int Size { get; }
 		public Operation Operation { get; set; }
@@ -18,13 +18,13 @@ namespace Day20 {
 			int tileSize = map[0, 0].Size - 2;
 			this.Size = size * tileSize;//size * tileSize - size * 2;
 			this.image = new bool[Size, Size];
-
+*/
 			/*for (int y = 0, tileY = 0; y < Size; y++, tileY = y / Size) {
 				for (int x = 0, tileX = 0; x < Size; x++, tileX = x / Size) {
 					image[x, y] = map[tileX, tileY][x % (tileSize - 2) + 1, y % (tileSize - 2) + 1];
 				}
 			}*/
-			for(int tiley = 0; tiley < size; tiley++) {
+/*			for(int tiley = 0; tiley < size; tiley++) {
 				for(int tilex = 0; tilex < size; tilex++) {
 					for(int y = 0; y < tileSize; y++) {
 						for(int x = 0; x < tileSize; x++) {
@@ -70,7 +70,7 @@ namespace Day20 {
 		IEnumerator IEnumerable.GetEnumerator() {
 			return this.GetEnumerator();
 		}
-
+*/
 		/*private IEnumerable<Point> getAllPoints() {
 			for(int y = 0; y < Size; y++) {
 				for(int x = 0; x < Size; x++) {
@@ -78,7 +78,7 @@ namespace Day20 {
 				}
 			}
 		}*/
-
+/*
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder();
 			for(int y = 0; y < Size; y++) {
@@ -90,4 +90,5 @@ namespace Day20 {
 			return sb.ToString();
 		}
 	}
+*/
 }

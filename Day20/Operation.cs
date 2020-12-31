@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Day20 {
-	struct Operation {
+	public struct Operation {
 
 		public static readonly Operation Original = new Operation(false, false, false);
 		public static readonly Operation Rotate90 = new Operation(true, false, true);
