@@ -8,12 +8,25 @@ namespace Day22 {
 
 		public int Player { get; private set; }
 		public IEnumerable<int> Cards { get => cards; }
+		public int Count { get => cards.Count; }
+		public bool Empty { get => cards.Count == 0; }
 
-		private List<int> cards;
+		private Queue<int> cards;
 
 		public void Parse(string[] input) {
 			this.Player = int.Parse(input[0].Substring("Player ".Length, 1));
-			this.cards = input.Skip(1).Select(int.Parse).ToList();
+			this.cards = new Queue<int>(input.Skip(1).Select(int.Parse));
+		}
+
+		public int Draw() {
+			return cards.Dequeue();
+		}
+
+		public void PushBack(IEnumerable<int> cards, bool sort = true) {
+			if (sort) cards = cards.OrderByDescending(x => x);
+			foreach(int card in cards) {
+				this.cards.Enqueue(card);
+			}
 		}
 
 		public override string ToString() {

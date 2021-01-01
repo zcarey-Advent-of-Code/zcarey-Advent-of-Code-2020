@@ -62,5 +62,12 @@ namespace Common {
 				}
 			}
 		}
+
+		public static IEnumerable<(int Index, T Element)> WithIndex<T>(this IEnumerable<T> source) {
+			int index = 0;
+			foreach(T element in source) {
+				yield return (index++, element);
+			}
+		}
 	}
 }
