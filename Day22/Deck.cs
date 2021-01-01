@@ -13,8 +13,15 @@ namespace Day22 {
 
 		private Queue<int> cards;
 
+		public Deck() { }
+
+		public Deck(Deck copy, int count) {
+			this.Player = copy.Player;
+			this.cards = new Queue<int>(copy.cards.Take(count));
+		}
+
 		public void Parse(string[] input) {
-			this.Player = int.Parse(input[0].Substring("Player ".Length, 1));
+			this.Player = int.Parse(input[0].Substring("Player ".Length, 1)) - 1;
 			this.cards = new Queue<int>(input.Skip(1).Select(int.Parse));
 		}
 
@@ -31,6 +38,10 @@ namespace Day22 {
 
 		public override string ToString() {
 			return string.Join(", ", this.cards);
+		}
+
+		public string GetHash() {
+			return new string(this.cards.Select(x => (char)('!' + x)).ToArray());
 		}
 	}
 }
