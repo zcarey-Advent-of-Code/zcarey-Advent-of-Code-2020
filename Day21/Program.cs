@@ -47,7 +47,36 @@ namespace Day21 {
 		}
 
 		protected override string CalculatePart2(Food[] input) {
-			return "null";
+			//Copy pasta from part 1 with a few changes to find the part 2 answer
+
+			Dictionary<string, string> foundAllergens = new Dictionary<string, string>();
+			Dictionary<string, List<string>> allergens = new Dictionary<string, List<string>>();
+
+			bool changed = true;
+			while (changed) {
+				changed = false;
+
+				foreach (Food food in input) {
+					foreach (string allergen in food.Allergens) {
+						if (!allergens.ContainsKey(allergen)) {
+							allergens[allergen] = new List<string>(food.Ingredients);
+							changed = true;
+						} else {
+							List<string> newList = allergens[allergen].Intersect(food.Ingredients).ToList();
+							changed |= (newList.Count != allergens[allergen].Count);
+							allergens[allergen] = newList;
+						}
+
+						changed |= (allergens[allergen].RemoveAll(x => foundAllergens.ContainsKey(x)) != 0);
+						if (allergens[allergen].Count == 1 && !foundAllergens.ContainsKey(allergens[allergen][0])) {
+							foundAllergens[allergens[allergen][0]] = allergen;
+							changed = true;
+						}
+					}
+				}
+			}
+
+			return string.Join(',', foundAllergens.OrderBy(pair => pair.Value).Select(pair => pair.Key));
 		}
 	}
 }
