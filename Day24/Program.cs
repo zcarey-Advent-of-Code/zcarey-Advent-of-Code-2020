@@ -3,7 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using Grid = System.Collections.Generic.Dictionary<System.Drawing.Point, bool>;
+
+//NOTE: Points stored in the set are considered black since white is the default tile color
+using Grid = System.Collections.Generic.HashSet<System.Drawing.Point>;
 
 namespace Day24 {
 	class Program : ParsedInputProgramStructure<Directions> {
@@ -24,12 +26,16 @@ namespace Day24 {
 			Grid grid = new Grid();
 			foreach(Directions directions in input) {
 				Point result = directions.GetAbsoluteOffset();
-				if (!grid.ContainsKey(result)) grid[result] = false; //Because tiles are by-default white, so now that it's flipped it is black
-				else grid[result] ^= true;
+
+				//If removal is successful, it means the tile was black and is now white.
+				//If removal was unsuccessful, it means the tile was white so now we have to make it black
+				if (!grid.Remove(result)) {
+					grid.Add(result);
+				}
 			}
 
 			part1Result = grid;
-			return grid.Select(pair => pair.Value).Count(x => x == false).ToString();
+			return grid.Count.ToString();
 		}
 
 		protected override string CalculatePart2(Directions[] input) {
@@ -44,31 +50,32 @@ namespace Day24 {
 				currentState = ConwaysGameOfLife(currentState);
 			}
 
-			return currentState.Select(pair => pair.Value).Count(x => x == false).ToString();
+			return currentState.Count.ToString();
 		}
 
 		private Grid ConwaysGameOfLife(Grid currentState) {
 			Grid nextState = new Grid();
+			Grid possibleNewCells = new Grid();
 
-			foreach(KeyValuePair<Point, bool> cell in currentState) {
-				int blackTileCount = cell.Key.HexagonNeighbors().Select(p => {
-					bool result;
-					if (currentState.TryGetValue(p, out result)) {
-						return result;
-					} else {
-						return true; //Tiles default to white.
-					}
-				}).Count(x => x == false); //Count black tiles
-
-				if (cell.Value) {
-					//White
-					if(blackTileCount == 2) {
-						//Gets flipped to black
-						nextState[cell.Key] = false;
-					}
+			foreach(Point blackCell in currentState) {
+				//Keep track of surrounding white cells to check later
+				foreach (Point p in blackCell.HexagonNeighbors().Where(x => !nextState.Contains(x))) {
+					possibleNewCells.Add(p);
+				}
+				int blackTileCount = blackCell.HexagonNeighbors().Count(x => currentState.Contains(x)); //Count black tiles
+				if((blackTileCount == 0) || (blackTileCount > 2)) {
+					//It's flipped white so don't add to the next state
 				} else {
-					//Black
-					if()
+					//It stays black, so we have to add the point to the next state
+					nextState.Add(blackCell);
+				}
+			}
+
+			foreach(Point whiteCell in possibleNewCells) {
+				int blackTileCount = whiteCell.HexagonNeighbors().Count(x => currentState.Contains(x)); //Count black tiles
+				if(blackTileCount == 2) {
+					//Flips to black, so add to the next state
+					nextState.Add(whiteCell);
 				}
 			}
 
