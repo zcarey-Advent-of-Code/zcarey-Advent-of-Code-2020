@@ -75,6 +75,18 @@ namespace Common {
 		}
 	}
 
+	public abstract class SingleParsedInputProgramStructure<T> : ProgramStructure<T> {
+		private Func<string, T> Parser;
+
+		protected SingleParsedInputProgramStructure(Func<string, T> ParseFunc) {
+			this.Parser = ParseFunc;
+		}
+
+		protected sealed override T LoadInputData(string FileName) {
+			return Parser(File.ReadAllText(FileName));
+		}
+	}
+
 	public interface FullInputParser {
 		void Parse(string[] input); //Throw an exception is parsing fails.
 	}
