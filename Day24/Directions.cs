@@ -8,6 +8,8 @@ using System.Text;
 namespace Day24 {
 	class Directions /*: IEnumerable<Point>*/ {
 
+		//Using the axial coordinate system for grid coordinates
+		//https://www.redblobgames.com/grids/hexagons/#coordinates-axial
 		private Point[] offsets;
 
 		public Directions(string input) {
@@ -82,4 +84,19 @@ namespace Day24 {
 			}
 		}
 */	}
+
+	public static class HexagonalPointExtensions {
+
+		//Using the axial coordinate system for grid coordinates
+		//https://www.redblobgames.com/grids/hexagons/#coordinates-axial
+		public static IEnumerable<Point> HexagonNeighbors(this Point point) {
+			yield return new Point(point.X - 1, point.Y);
+			yield return new Point(point.X, point.Y - 1);
+			yield return new Point(point.X + 1, point.Y - 1);
+			yield return new Point(point.X + 1, point.Y);
+			yield return new Point(point.X, point.Y + 1);
+			yield return new Point(point.X - 1, point.Y + 1);
+		}
+
+	}
 }
