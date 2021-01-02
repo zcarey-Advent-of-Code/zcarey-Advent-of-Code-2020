@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 
 namespace Day24 {
-	class Directions /*: IEnumerable<Point>*/ {
+	class Directions {
 
 		//Using the axial coordinate system for grid coordinates
 		//https://www.redblobgames.com/grids/hexagons/#coordinates-axial
@@ -46,44 +46,11 @@ namespace Day24 {
 			}
 			return origin;
 		}
-		/*
-		public IEnumerator<Point> GetEnumerator() {
-			return this.offsets.GetEnumerator<Point>(); //new CustomEnumerator(offsets);
-		}
 
-		IEnumerator IEnumerable.GetEnumerator() {
-			return this.GetEnumerator();
-		}
-		*/
 		public static Directions Parse(string input) {
 			return new Directions(input);
 		}
-/*
-		private class CustomEnumerator : IEnumerator<(int q, int r)> {
-			public (int q, int r) Current => array[index];
-			object IEnumerator.Current => this.Current;
-
-			private (int q, int r)[] array;
-			int index = -1;
-
-			public CustomEnumerator((int q, int r)[] array) {
-				this.array = array;
-			}
-
-			public void Dispose() {
-				this.array = null;
-			}
-
-			public bool MoveNext() {
-				index++;
-				return index < array.Length;
-			}
-
-			public void Reset() {
-				this.index = -1;
-			}
-		}
-*/	}
+	}
 
 	public static class HexagonalPointExtensions {
 
