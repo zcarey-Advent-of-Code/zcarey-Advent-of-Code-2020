@@ -4,12 +4,4 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="CircularLinkedList.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="CircularLinkedList.cs" />
-  </ItemGroup>
-
 </Project>
