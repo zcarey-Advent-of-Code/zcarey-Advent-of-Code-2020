@@ -6,16 +6,15 @@ using System.Linq;
 using AdventOfCode.Parsing;
 
 namespace Day16 {
-	class InputData : IObjectParser<string[]> {
+	class InputData : IObjectParser<IEnumerable<string[]>> {
 
 		public Rule[] Rules { get; private set; }
 		public int TicketLength { get; private set; }
 		public int[] MyTicket { get; private set; }
 		public int[][] OtherTickets { get; private set; }
 
-		public void Parse(string[] input) {
-			IEnumerable<IEnumerable<string>> blocks = input.GetGroups();
-			IEnumerator<IEnumerable<string>> enumerator = blocks.GetEnumerator();
+		public void Parse(IEnumerable<string[]> input) {
+			IEnumerator<IEnumerable<string>> enumerator = input.GetEnumerator();
 			enumerator.MoveNext();
 			parseRules(enumerator.Current);
 			enumerator.MoveNext();

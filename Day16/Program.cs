@@ -10,7 +10,7 @@ namespace Day16 {
 
 		Program() : base(new Parser()
 			.Filter(new LineReader())
-			.ToArray()
+			.Filter(new TextBlockFilter())
 			.Create<InputData>()
 		) { }
 

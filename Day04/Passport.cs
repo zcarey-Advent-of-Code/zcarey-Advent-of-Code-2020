@@ -24,7 +24,7 @@ namespace Day4 {
 		public bool IsValid { get; private set; } = false;
 
 		public void Parse(string[] input) {
-			foreach (string element in input.GetElements()) {
+			foreach (string element in input/*.GetElements()*/) {
 				int index = element.IndexOf(':');
 				string key = element.Substring(0, index);
 				string value = element.Substring(index + 1);

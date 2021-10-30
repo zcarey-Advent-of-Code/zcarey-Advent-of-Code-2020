@@ -12,6 +12,9 @@ namespace Day4 {
 		Program() : base(new Parser()
 			.Filter(new LineReader())
 			.Filter(new TextBlockFilter())
+			.ForEach(new Parser()
+				.ForEach(new SeparatedParser())
+			)
 			.FilterCreate<Passport>()
 			.ToArray()
 		) { }

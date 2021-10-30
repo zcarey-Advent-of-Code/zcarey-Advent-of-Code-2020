@@ -86,6 +86,24 @@ namespace AdventOfCode.Parsing {
 			);
 		}
 
+		public ParserFilter<O> ForEach<O>(IParser<T, O> filter) {
+			return base.Filter(
+				(IEnumerable<T> input) => ForEach(input, filter)
+			);
+		}
+
+		private static IEnumerable<O> ForEach<O>(IEnumerable<T> inputs, IParser<T, O> filter) {
+			foreach(T input in inputs) {
+				yield return filter.Parse(input);
+			}
+		}
+
+		public ParserFilter<O> ForEach<O>(Func<T, O> filter) {
+			return base.Filter(
+				(IEnumerable<T> ParseInput) =>
+			);
+		}
+
 		public ParserFilter<O> FilterCreate<O>() where O : IObjectParser<T>, new() {
 			return base.Filter(FilterCreate<O>);
 		}
