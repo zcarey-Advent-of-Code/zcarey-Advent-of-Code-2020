@@ -1,10 +1,11 @@
-﻿using Common;
+﻿using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Day22 {
-	class Deck : FullInputParser {
+	class Deck : IObjectParser<string[]> {
 
 		public int Player { get; private set; }
 		public IEnumerable<int> Cards { get => cards; }

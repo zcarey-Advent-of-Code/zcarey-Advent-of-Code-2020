@@ -1,20 +1,25 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Day21 {
-	class Program : ParsedInputProgramStructure<Food> {
+	class Program : ProgramStructure<Food[]> {
 
-		Program() : base(Food.Parse) {
-		}
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.Filter(Food.Parse)
+			.ToArray()
+		) { }
 
 		static void Main(string[] args) {
-			new Program().Run("input.txt");
+			new Program().Run(args);
 			//new Program().Run("Example.txt");
 		}
 
-		protected override string CalculatePart1(Food[] input) {
+		protected override object SolvePart1(Food[] input) {
 			List<string> foundAllergens = new List<string>();
 			Dictionary<string, List<string>> allergens = new Dictionary<string, List<string>>();
 
@@ -46,7 +51,7 @@ namespace Day21 {
 			return input.SelectMany(x => x.Ingredients).Where(x => !foundAllergens.Contains(x)).Count().ToString(); 
 		}
 
-		protected override string CalculatePart2(Food[] input) {
+		protected override object SolvePart2(Food[] input) {
 			//Copy pasta from part 1 with a few changes to find the part 2 answer
 
 			Dictionary<string, string> foundAllergens = new Dictionary<string, string>();

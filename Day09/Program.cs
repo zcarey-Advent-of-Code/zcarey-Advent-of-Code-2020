@@ -1,19 +1,25 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Day09 {
-	class Program : ParsedInputProgramStructure<long> {
+	class Program : ProgramStructure<long[]> {
 
 		private const int PREAMBLE_LEN = 25;
 		//private const int PREAMBLE_LEN = 5;
 
-		Program() : base(long.Parse) {
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.Filter(long.Parse)
+			.ToArray()
+		) {
 		}
 
 		static void Main(string[] args) {
-			new Program().Run("Input.txt");
+			new Program().Run(args);
 			//new Program().Run("Example.txt");
 		}
 
@@ -33,7 +39,7 @@ namespace Day09 {
 			throw new Exception("Could not compute.");
 		}
 
-		protected override string CalculatePart1(long[] input) {
+		protected override object SolvePart1(long[] input) {
 			return calcPart1(input).ToString();
 		}
 
@@ -48,7 +54,7 @@ namespace Day09 {
 			return false;
 		}
 
-		protected override string CalculatePart2(long[] input) {
+		protected override object SolvePart2(long[] input) {
 			long target = calcPart1(input);
 			for (int i = 0; i < input.Length - 1; i++) {
 				for(int j = i + 1; j < input.Length; j++) {

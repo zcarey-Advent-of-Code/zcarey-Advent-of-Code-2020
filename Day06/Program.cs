@@ -1,6 +1,5 @@
 ﻿using AdventOfCode;
 using AdventOfCode.Parsing;
-using AdventOfCode.Parsing.Filters;
 using Common;
 using System;
 using System.Collections.Generic;

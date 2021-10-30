@@ -1,10 +1,11 @@
-﻿using Common;
+﻿using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Day17 {
-	class Map : FullInputParser {
+	class Map : IObjectParser<string[]> {
 
 		private Dictionary<Point, bool> map = new Dictionary<Point, bool>();
 		private bool use4D = false;

@@ -1,20 +1,25 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Day10 {
-	class Program : ParsedInputProgramStructure<int> {
+	class Program : ProgramStructure<int[]> {
 
-		Program() : base(int.Parse) {
-		}
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.Filter(int.Parse)
+			.ToArray()
+		) { }
 
 		static void Main(string[] args) {
-			new Program().Run("Input.txt");
-			//new Program().Run("Example.txt");
+			new Program().Run(args);
+			//new Program().Run(args, "Example.txt");
 		}
 
-		protected override string CalculatePart1(int[] input) {
+		protected override object SolvePart1(int[] input) {
 			Array.Sort(input);
 			int jolt = 0;
 			int delta1Jolt = 0;
@@ -32,7 +37,7 @@ namespace Day10 {
 			return (delta1Jolt * delta3Jolt).ToString();
 		}
 
-		protected override string CalculatePart2(int[] input) {
+		protected override object SolvePart2(int[] input) {
 			Array.Sort(input);
 			IEnumerable<int> adapters = input.Reverse().Concat(0);
 			Dictionary<int, long> connections = new Dictionary<int, long>();

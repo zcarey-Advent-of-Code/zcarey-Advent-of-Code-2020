@@ -1,13 +1,14 @@
-﻿using System;
+﻿using AdventOfCode.Parsing;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Day25 {
-	class PublicKey {
+	class PublicKey : IObjectParser<string> {
 
 		public long Key { get; private set; }
 
-		public PublicKey(string input) {
+		public void Parse(string input) {
 			this.Key = long.Parse(input);
 		}
 

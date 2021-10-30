@@ -1,21 +1,25 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 
 namespace Day23 {
-	class Program : SingleParsedInputProgramStructure<Cups> {
+	class Program : ProgramStructure<Cups> {
 
-		Program() : base(x => new Cups(x)) {
-		}
+		Program() : base(new Parser()
+			.Parse(new StringReader())
+			.Create<Cups>()
+		) { }
 
 		static void Main(string[] args) {
-			new Program().Run("input.txt");
+			new Program().Run(args);
 			//new Program().Run("Example.txt");
 		}
 
-		protected override string CalculatePart1(Cups cups) {
+		protected override object SolvePart1(Cups cups) {
 			//Only use listed cups with 100 moves
 			GetCrabby(ref cups, cups.Count, 100);
 
@@ -26,7 +30,7 @@ namespace Day23 {
 			return new string(oneCup.Skip(1).Select(x => (char)('0' + x)).ToArray());
 		}
 
-		protected override string CalculatePart2(Cups cups) {
+		protected override object SolvePart2(Cups cups) {
 			//Add additional cups (up to one million) and with ten million moves
 			GetCrabby(ref cups, 1000000, 10000000);
 

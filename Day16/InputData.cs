@@ -3,9 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using AdventOfCode.Parsing;
 
 namespace Day16 {
-	class InputData : FullInputParser {
+	class InputData : IObjectParser<string[]> {
 
 		public Rule[] Rules { get; private set; }
 		public int TicketLength { get; private set; }

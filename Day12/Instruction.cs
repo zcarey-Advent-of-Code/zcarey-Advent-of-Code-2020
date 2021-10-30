@@ -1,17 +1,18 @@
-﻿using System;
+﻿using AdventOfCode.Parsing;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 
 namespace Day12 {
-	struct Instruction {
+	struct Instruction : IObjectParser<string> {
 
 		public char Operation;
 		public int Units;
 
 		//public bool IsMoveCommand { get => getIsMoveCommand(); }
 
-		public Instruction(string input) {
+		public void Parse(string input) {
 			this.Operation = input[0];
 			this.Units = int.Parse(input.Substring(1));
 		}

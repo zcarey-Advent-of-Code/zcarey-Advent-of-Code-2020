@@ -1,21 +1,24 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Drawing;
 
 namespace Day12 {
-	class Program : ParsedInputProgramStructure<Instruction> {
+	class Program : ProgramStructure<Instruction[]> {
 
-		Program() : base(x => new Instruction(x)) {
-		}
-
-		protected override bool HasVisualizer => throw new NotImplementedException();
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.FilterCreate<Instruction>()
+			.ToArray()
+		) { }
 
 		static void Main(string[] args) {
-			new Program().Run("Input.txt");
+			new Program().Run(args);
 			//new Program().Run("Example.txt");
 		}
 
-		protected override string CalculatePart1(Instruction[] input) {
+		protected override object SolvePart1(Instruction[] input) {
 			int angle = 0;
 			Point location = new Point();
 			foreach(Instruction instruction in input) {
@@ -25,7 +28,7 @@ namespace Day12 {
 			return (Math.Abs(location.X) + Math.Abs(location.Y)).ToString();
 		}
 
-		protected override string CalculatePart2(Instruction[] input) {
+		protected override object SolvePart2(Instruction[] input) {
 			Point ship = new Point();
 			Size waypoint = new Size(10, -1);
 			foreach(Instruction instruction in input) {

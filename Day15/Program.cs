@@ -1,19 +1,25 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections.Generic;
 
 namespace Day15 {
-	class Program : ParsedSeparatedInputProgramStructure<int> {
+	class Program : ProgramStructure<int[]> {
 
-		Program() : base(",", int.Parse) {
-		}
+		Program() : base(new Parser()
+			.Parse(new StringReader())
+			.Filter(new SeparatedParser(","))
+			.Filter(int.Parse)
+			.ToArray()
+		) { }
 
 		static void Main(string[] args) {
-			new Program().Run("input.txt");
+			new Program().Run(args);
 			//new Program().Run("Example.txt");
 		}
 
-		protected override string CalculatePart1(int[] input) {
+		protected override object SolvePart1(int[] input) {
 			Dictionary<int, int> lastSpoken = new Dictionary<int, int>();
 			int t = 1;
 			int nextNumber = 0;
@@ -42,7 +48,7 @@ namespace Day15 {
 			return nextNumber.ToString();
 		}
 
-		protected override string CalculatePart2(int[] input) {
+		protected override object SolvePart2(int[] input) {
 			Dictionary<int, int> lastSpoken = new Dictionary<int, int>();
 			int t = 1;
 			int nextNumber = 0;

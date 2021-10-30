@@ -1,11 +1,12 @@
-﻿using Common;
+﻿using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Day19 {
 
-	class Input : FullInputParser {
+	class Input : IObjectParser<string[]> {
 
 		public Dictionary<int, Rule> Rules { get; } = new Dictionary<int, Rule>();
 		private List<string> messages = new List<string>();

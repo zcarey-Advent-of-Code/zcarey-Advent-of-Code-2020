@@ -1,16 +1,25 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Day16 {
-	class Program : FullParsedInputProgramStructure<InputData> {
+	class Program : ProgramStructure<InputData> {
+
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.ToArray()
+			.Create<InputData>()
+		) { }
+
 		static void Main(string[] args) {
-			new Program().Run("input.txt");
+			new Program().Run(args);
 			//new Program().Run("example.txt");
 		}
 
-		protected override string CalculatePart1(InputData input) {
+		protected override object SolvePart1(InputData input) {
 			int ticketScanningErrorRate = 0;
 			foreach(int[] ticket in input.OtherTickets) {
 				foreach(int number in ticket) {
@@ -30,7 +39,7 @@ namespace Day16 {
 			}
 		}
 
-		protected override string CalculatePart2(InputData input) {
+		protected override object SolvePart2(InputData input) {
 			//Initialize all valid rules
 			List<Rule>[] validRules = new List<Rule>[input.TicketLength];
 			for(int i = 0; i < validRules.Length; i++) {

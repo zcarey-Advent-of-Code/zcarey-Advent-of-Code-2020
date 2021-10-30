@@ -1,4 +1,6 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,7 +8,19 @@ using System.Linq;
 using System.Numerics;
 
 namespace Day20 {
-	class Program : BlockParsedInputProgramStructure<Input> {
+	class Program : ProgramStructure<Input[]> {
+
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.Filter(new TextBlockFilter())
+			.FilterCreate<Input>()
+			.ToArray()
+		) { }
+
+		static void Main(string[] args) {
+			new Program().Run(args);
+			//new Program().Run("Example.txt");
+		}
 
 		static Operation[] ValidOperations = Operation.GetAllOperations().ToArray();
 		/*static Operation[] ValidOperations = {
@@ -19,12 +33,7 @@ namespace Day20 {
 
 		static Map solvedMap;
 
-		static void Main(string[] args) {
-			new Program().Run("input.txt");
-			//new Program().Run("Example.txt");
-		}
-
-		protected override string CalculatePart1(Input[] input) {
+		protected override object SolvePart1(Input[] input) {
 			int size = (int)Math.Sqrt(input.Length);
 			if ((size * size) != input.Length) throw new Exception("Tiles can't form a square!");
 			Map map = new Map(size);
@@ -66,9 +75,9 @@ namespace Day20 {
 			return false;
 		}
 
-		protected override string CalculatePart2(Input[] input) {
+		protected override object SolvePart2(Input[] input) {
 			//"Cheating" on run time by using using the result from Part1
-			if (solvedMap == null) CalculatePart1(input);
+			if (solvedMap == null) SolvePart1(input);
 			SquareImage<bool> image = solvedMap.GetImage(); //Image image = solvedMap.Image;
 			Pattern pattern = Pattern.SeaMonster;
 			SquareImage<bool> result = new SquareImage<bool>(image.Size); 

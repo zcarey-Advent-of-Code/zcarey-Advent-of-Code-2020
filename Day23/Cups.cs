@@ -1,11 +1,12 @@
-﻿using Common;
+﻿using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Day23 {
-	class Cups : IEnumerable<int> {
+	class Cups : IObjectParser<string>, IEnumerable<int> {
 
 		/// <summary>
 		/// The number of cups stored
@@ -24,10 +25,12 @@ namespace Day23 {
 		/// Parses cup labels from the given input string
 		/// </summary>
 		/// <param name="input"></param>
-		public Cups(string input) {
+		public void Parse(string input) {
 			cups = new LinkedList<int>(input.Select(x => int.Parse(x.ToString())));
 			createNodeLookup();
 		}
+
+		public Cups() { }
 
 		/// <summary>
 		/// Copies cups from a previously parsed object and appends additional cup values.

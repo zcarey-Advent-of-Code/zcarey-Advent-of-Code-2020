@@ -1,18 +1,27 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Day22 {
-	class Program : BlockParsedInputProgramStructure<Deck> {
+	class Program : ProgramStructure<Deck[]> {
+
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.Filter(new TextBlockFilter())
+			.FilterCreate<Deck>()
+			.ToArray()
+		) { }
 
 		static void Main(string[] args) {
-			new Program().Run("input.txt");
+			new Program().Run(args);
 			//new Program().Run("Example.txt");
 			//new Program().Run("ExampleInfinite.txt", true);
 		}
 
-		protected override string CalculatePart1(Deck[] input) {
+		protected override object SolvePart1(Deck[] input) {
 			while (!input[0].Empty && !input[1].Empty) {
 				int card1 = input[0].Draw();
 				int card2 = input[1].Draw();
@@ -24,7 +33,7 @@ namespace Day22 {
 			return winner.Cards.Reverse().WithIndex().Select(pair => pair.Element * (pair.Index + 1)).Sum().ToString();
 		}
 
-		protected override string CalculatePart2(Deck[] input) {
+		protected override object SolvePart2(Deck[] input) {
 			Deck winner = RecursiveCombat(input);
 			return winner.Cards.Reverse().WithIndex().Select(pair => pair.Element * (pair.Index + 1)).Sum().ToString();
 		}

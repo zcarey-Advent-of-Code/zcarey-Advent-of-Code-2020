@@ -1,13 +1,22 @@
 ﻿using System;
+using AdventOfCode;
+using AdventOfCode.Parsing;
 using Common;
 
 namespace Day11 {
-	class Program : FullParsedInputProgramStructure<Map>{
+	class Program : ProgramStructure<Map>{
+
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.ToArray()
+			.Create<Map>()
+		) { }
+
 		static void Main(string[] args) {
-			new Program().Run("Input.txt");
+			new Program().Run(args);
 		}
 
-		protected override string CalculatePart1(Map input) {
+		protected override object SolvePart1(Map input) {
 			bool updated = true;
 			while (updated) {
 				input.UpdateOccupiedCount();
@@ -16,7 +25,7 @@ namespace Day11 {
 			return input.CountOccupiedSeats().ToString();
 		}
 
-		protected override string CalculatePart2(Map input) {
+		protected override object SolvePart2(Map input) {
 			bool updated = true;
 			while (updated) {
 				input.UpdateOccupiedCount2();

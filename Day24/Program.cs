@@ -1,4 +1,6 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,19 +10,22 @@ using System.Linq;
 using Grid = System.Collections.Generic.HashSet<System.Drawing.Point>;
 
 namespace Day24 {
-	class Program : ParsedInputProgramStructure<Directions> {
+	class Program : ProgramStructure<Directions[]> {
 
 		static Grid part1Result;
 
-		Program() : base(Directions.Parse) {
-		}
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.FilterCreate<Directions>()
+			.ToArray()
+		) { }
 
 		static void Main(string[] args) {
-			new Program().Run("input.txt");
+			new Program().Run(args);
 			//new Program().Run("Example.txt");
 		}
 
-		protected override string CalculatePart1(Directions[] input) {
+		protected override object SolvePart1(Directions[] input) {
 			//Using axial coordinates for grid system
 			//https://www.redblobgames.com/grids/hexagons/#coordinates-axial
 			Grid grid = new Grid();
@@ -38,9 +43,9 @@ namespace Day24 {
 			return grid.Count.ToString();
 		}
 
-		protected override string CalculatePart2(Directions[] input) {
+		protected override object SolvePart2(Directions[] input) {
 			if(part1Result == null) {
-				CalculatePart1(input);
+				SolvePart1(input);
 			}
 
 			//Using axial coordinates for grid system

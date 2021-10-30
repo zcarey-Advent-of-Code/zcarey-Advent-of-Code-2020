@@ -1,17 +1,23 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 
 namespace Day25 {
-	class Program : ParsedInputProgramStructure<PublicKey> {
+	class Program : ProgramStructure<PublicKey[]> {
 
-		Program() : base(x => new PublicKey(x)) { }
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.FilterCreate<PublicKey>()
+			.ToArray()
+		) { }
 
 		static void Main(string[] args) {
-			new Program().Run("input.txt");
+			new Program().Run(args);
 			//new Program().Run("Example.txt");
 		}
 
-		protected override string CalculatePart1(PublicKey[] input) {
+		protected override object SolvePart1(PublicKey[] input) {
 			PublicKey cardPublicKey = input[0];
 			PublicKey doorPublicKey = input[1];
 
@@ -22,8 +28,8 @@ namespace Day25 {
 			return encryptionKey.ToString();
 		}
 
-		protected override string CalculatePart2(PublicKey[] input) {
-			return "null";
+		protected override object SolvePart2(PublicKey[] input) {
+			return null;
 		}
 	}
 }

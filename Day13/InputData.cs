@@ -1,10 +1,11 @@
-﻿using Common;
+﻿using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Day13 {
-	class InputData : FullInputParser {
+	class InputData : IObjectParser<string[]> {
 
 		public int EarliestTime;
 		public int[] BusIDs;

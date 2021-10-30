@@ -1,15 +1,23 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 
 namespace Day13 {
-	class Program : FullParsedInputProgramStructure<InputData> {
+	class Program : ProgramStructure<InputData> {
+
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.ToArray()
+			.Create<InputData>()
+		) { }
 
 		static void Main(string[] args) {
-			new Program().Run("Input.txt");
+			new Program().Run(args);
 			//new Program().Run("Example.txt");
 		}
 
-		protected override string CalculatePart1(InputData input) {
+		protected override object SolvePart1(InputData input) {
 			int bestBusId = -1;
 			int bestTime = int.MaxValue;
 			foreach(int busId in input.BusIDs) {
@@ -24,7 +32,7 @@ namespace Day13 {
 			return (bestBusId * bestTime).ToString();
 		}
 
-		protected override string CalculatePart2(InputData input) {
+		protected override object SolvePart2(InputData input) {
 			//printDebug(input);
 			int[] data = input.BusIDs;
 			long t = 1;

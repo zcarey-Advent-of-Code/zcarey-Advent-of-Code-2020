@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AdventOfCode.Parsing;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,13 +7,13 @@ using System.Linq;
 using System.Text;
 
 namespace Day24 {
-	class Directions {
+	class Directions : IObjectParser<string> {
 
 		//Using the axial coordinate system for grid coordinates
 		//https://www.redblobgames.com/grids/hexagons/#coordinates-axial
 		private Point[] offsets;
 
-		public Directions(string input) {
+		public void Parse(string input) {
 			offsets = convert(input).ToArray();
 		}
 
@@ -47,9 +48,6 @@ namespace Day24 {
 			return origin;
 		}
 
-		public static Directions Parse(string input) {
-			return new Directions(input);
-		}
 	}
 
 	public static class HexagonalPointExtensions {
