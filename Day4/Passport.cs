@@ -5,9 +5,10 @@ using System.Numerics;
 using System.Text;
 using System.Linq;
 using Common;
+using AdventOfCode.Parsing;
 
 namespace Day4 {
-	class Passport : FullInputParser {
+	class Passport : IObjectParser<string[]> {
 
 		private static readonly string[] EyeColors = { "amb", "blu", "brn", "gry", "grn", "hzl", "oth" };
 

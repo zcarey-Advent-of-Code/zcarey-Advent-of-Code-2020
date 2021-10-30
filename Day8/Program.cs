@@ -1,20 +1,25 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
 namespace Day8 {
-	class Program : ParsedInputProgramStructure<Instruction> {
+	class Program : ProgramStructure<Instruction[]> {
 
-		Program() : base(x => new Instruction(x)) {
-		}
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.FilterCreate<Instruction>()
+			.ToArray()
+		) { }
 
 		static void Main(string[] args) {
-			new Program().Run("Input.txt");
+			new Program().Run(args);
 		}
 
-		protected override string CalculatePart1(Instruction[] program) {
+		protected override object SolvePart1(Instruction[] program) {
 			bool[] visited = new bool[program.Length];
 
 			int programCounter = 0;
@@ -30,7 +35,7 @@ namespace Day8 {
 			return accumulator.ToString();
 		}
 
-		protected override string CalculatePart2(Instruction[] program) {
+		protected override object SolvePart2(Instruction[] program) {
 			for (int i = 0; i < program.Length; i++) {
 				Instruction copy = program[i];
 				if (copy.Op == Operation.Jmp || copy.Op == Operation.Nop) {

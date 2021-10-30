@@ -1,17 +1,25 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using AdventOfCode.Parsing.Filters;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
 namespace Day6 {
-	class Program : BlockInputProgramStructure {
+	class Program : ProgramStructure<IEnumerable<string[]>> {
+
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.Filter(new TextBlockFilter())
+		) { }
 
 		static void Main(string[] args) {
-			new Program().Run("Input.txt");
+			new Program().Run(args);
 		}
 
-		protected override string CalculatePart1(IEnumerable<string[]> input) {
+		protected override object SolvePart1(IEnumerable<string[]> input) {
 			int count = 0;
 			foreach (string[] group in input) {
 				count += calculateGroup(group);
@@ -32,7 +40,7 @@ namespace Day6 {
 			return questions.Count;
 		}
 
-		protected override string CalculatePart2(IEnumerable<string[]> input) {
+		protected override object SolvePart2(IEnumerable<string[]> input) {
 			int count = 0;
 			foreach (string[] group in input) {
 				count += calculateGroup2(group);

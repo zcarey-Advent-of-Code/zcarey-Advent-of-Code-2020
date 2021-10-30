@@ -1,19 +1,27 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
+//using System.IO;
 using System.Linq;
 using System.Numerics;
 
 namespace Day3 {
-	class Program : FullParsedInputProgramStructure<Map> {
+	class Program : ProgramStructure<Map> {
+
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.ToArray()
+			.Create<Map>()
+		) { }
 
 		static void Main(string[] args) {
-			new Program().Run("Input.txt");
+			new Program().Run(args);
 		}
 
-		protected override string CalculatePart1(Map input) {
+		protected override object SolvePart1(Map input) {
 			int trees = input.HitTree ? 1 : 0;
 			for (; input.OnSlope; input.Slide()) {
 				if (input.HitTree) {
@@ -24,7 +32,7 @@ namespace Day3 {
 		}
 
 		//There is actually a faster way to do this, but eh, input isn't large enough to care tbh.
-		protected override string CalculatePart2(Map input) {
+		protected override object SolvePart2(Map input) {
 			return (new BigInteger(calculateSlope(input, 1, 1))
 				* new BigInteger(calculateSlope(input, 3, 1))
 				* new BigInteger(calculateSlope(input, 5, 1))

@@ -1,22 +1,31 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
 namespace Day2 {
-	class Program : ParsedInputProgramStructure {
+	class Program : ProgramStructure<string[]> {
 
-		static void Main(string[] args) {
-			new Program().Run("Input.txt");
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.ToArray()
+		) {
+
 		}
 
-		protected override string CalculatePart1(string[] input) {
+		static void Main(string[] args) {
+			new Program().Run(args);
+		}
+
+		protected override object SolvePart1(string[] input) {
 			// A bit dirty but I think it still gets the point across
 			return input.Select(x => processInputLine(x)).Where(x => x == true).Count().ToString();
 		}
 
-		protected override string CalculatePart2(string[] input) {
+		protected override object SolvePart2(string[] input) {
 			// A bit dirty but I think it still gets the point across
 			return input.Select(x => processInputLinePart2(x)).Where(x => x == true).Count().ToString();
 		}

@@ -1,20 +1,27 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
 namespace Day1 {
-	class Program : ParsedInputProgramStructure<int> {
+	class Program : ProgramStructure<int[]> { //ParsedInputProgramStructure<int> {
 
-		Program() : base(int.Parse) {
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.Filter(int.Parse)
+			.ToArray()
+		) {
+
 		}
 
 		static void Main(string[] args) {
-			new Program().Run("Input.txt");
+			new Program().Run(args);
 		}
 
-		protected override string CalculatePart1(int[] input) {
+		protected override object SolvePart1(int[] input) {
 			for (int i = 0; i < input.Length - 1; i++) {
 				for (int j = i + 1; j < input.Length; j++) {
 					if (input[i] + input[j] == 2020) {
@@ -22,10 +29,10 @@ namespace Day1 {
 					}
 				}
 			}
-			throw new Exception("Unable to find the answer!!!");
+			return new Exception("Unable to find the answer!!!");
 		}
 
-		protected override string CalculatePart2(int[] input) {
+		protected override object SolvePart2(int[] input) {
 			for (int i = 0; i < input.Length - 2; i++) {
 				for (int j = i + 1; j < input.Length - 1; j++) {
 					for (int k = j + 1; k < input.Length; k++) {
@@ -35,7 +42,7 @@ namespace Day1 {
 					}
 				}
 			}
-			throw new Exception("Unable to find the answer!!!");
+			return new Exception("Unable to find the answer!!!");
 		}
 	}
 }

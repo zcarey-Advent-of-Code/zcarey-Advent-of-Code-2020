@@ -1,4 +1,6 @@
-﻿using Common;
+﻿using AdventOfCode;
+using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,20 +10,23 @@ using System.Numerics;
 using System.Text;
 
 namespace Day5 {
-	class Program : ParsedInputProgramStructure<Seat> {
+	class Program : ProgramStructure<Seat[]> {
 
-		Program() : base(x => new Seat(x)) {
-		}
+		Program() : base(new Parser()
+			.Filter(new LineReader())
+			.FilterCreate<Seat>()
+			.ToArray()
+		) { }
 
 		static void Main(string[] args) {
-			new Program().Run("Input.txt");
+			new Program().Run(args);
 		}
 
-		protected override string CalculatePart1(Seat[] input) {
+		protected override object SolvePart1(Seat[] input) {
 			return input.Max(x => x.ID).ToString();
 		}
 
-		protected override string CalculatePart2(Seat[] input) {
+		protected override object SolvePart2(Seat[] input) {
 			Seat[,] map = fillMap(input);
 			for (int y = 0; y <= 127; y++) {
 				for (int x = 1; x <= 6; x++) {

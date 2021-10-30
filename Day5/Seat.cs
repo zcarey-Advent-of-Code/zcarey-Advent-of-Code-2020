@@ -1,9 +1,10 @@
-﻿using System;
+﻿using AdventOfCode.Parsing;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Day5 {
-	struct Seat {
+	struct Seat : IObjectParser<string> {
 
 		private static Func<char, bool> RowConverter = (char c) => {
 			if (c == 'F') return true;
@@ -23,7 +24,7 @@ namespace Day5 {
 		public int ID { get => Row * 8 + Column; }
 		public bool Filled { get => IsValid; }
 
-		public Seat(string input) {
+		public void Parse(string input) {
 			if (input.Length != 10) throw new ArgumentException("Invalid number of input.", "input");
 			string rowInput = input.Substring(0, 7);
 			string colInput = input.Substring(7, 3);

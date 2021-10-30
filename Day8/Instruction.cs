@@ -1,9 +1,10 @@
-﻿using System;
+﻿using AdventOfCode.Parsing;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Day8 {
-	struct Instruction {
+	struct Instruction : IObjectParser<string> {
 
 		public Operation Op;
 		public int Arg;
@@ -12,12 +13,12 @@ namespace Day8 {
 		/// Parse the instruction from a line of input
 		/// </summary>
 		/// <param name="input"></param>
-		public Instruction(string input) {
+		public void Parse(string input) {
 			string op = input.Substring(0, 3);
 			string arg = input.Substring(4);
 
 			this.Op = ParseOp(op);
-			if(!int.TryParse(arg, out this.Arg) && !string.IsNullOrWhiteSpace(arg)) {
+			if (!int.TryParse(arg, out this.Arg) && !string.IsNullOrWhiteSpace(arg)) {
 				throw new ArgumentException("Unable to parse argument.", "input");
 			}
 		}

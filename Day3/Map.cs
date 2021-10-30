@@ -1,11 +1,12 @@
-﻿using Common;
+﻿using AdventOfCode.Parsing;
+using Common;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
 
 namespace Day3 {
-	class Map : FullInputParser {
+	class Map : IObjectParser<string[]> {
 
 		private bool[,] map;
 		private int width;
