@@ -5,18 +5,34 @@ using System.Text;
 namespace AdventOfCode.Parsing {
 	public static class ParserExtensions_Combine {
 
-		public static ParserFilter<TInput, TOutput> Combine<TInput, TOutput>(this ParserBase<TInput, IEnumerable<IEnumerable<TOutput>>> source) {
+		/// <summary>
+		/// Converts a 2D array (arrays within an array) into a single array containing all the elements.
+		/// i.e. Converts IEnumerable&lt;IEnumerable&lt;string&gt;&gt; into IEnumerable&lt;string&gt;
+		/// </summary>
+		public static ParserFilter<TInput, TOutput> Combine<TInput, TOutput>(this ParserFilter<TInput, IEnumerable<TOutput>> source) {
 			return source.Filter(ParserExtensions_Combine.Combine);
 		}
 
-		public static ParserFilter<TInput, TOutput> Combine<TInput, TOutput>(this ParserBase<TInput, IEnumerable<TOutput[]>> source) {
+		/// <summary>
+		/// Converts a 2D array (arrays within an array) into a single array containing all the elements.
+		/// i.e. Converts IEnumerable&lt;IEnumerable&lt;string&gt;&gt; into IEnumerable&lt;string&gt;
+		/// </summary>
+		public static ParserFilter<TInput, TOutput> Combine<TInput, TOutput>(this ParserFilter<TInput, TOutput[]> source) {
 			return source.Filter(ParserExtensions_Combine.Combine);
 		}
 
+		/// <summary>
+		/// Converts a 2D array (arrays within an array) into a single array containing all the elements.
+		/// i.e. Converts IEnumerable&lt;IEnumerable&lt;string&gt;&gt; into IEnumerable&lt;string&gt;
+		/// </summary>
 		public static ParserFilter<TInput, TOutput> Combine<TInput, TOutput>(this ParserBase<TInput, IEnumerable<TOutput>[]> source) {
 			return source.Filter(ParserExtensions_Combine.Combine);
 		}
 
+		/// <summary>
+		/// Converts a 2D array (arrays within an array) into a single array containing all the elements.
+		/// i.e. Converts IEnumerable&lt;IEnumerable&lt;string&gt;&gt; into IEnumerable&lt;string&gt;
+		/// </summary>
 		public static ParserFilter<TInput, TOutput> Combine<TInput, TOutput>(this ParserBase<TInput, TOutput[][]> source) {
 			return source.Filter(ParserExtensions_Combine.Combine);
 		}
