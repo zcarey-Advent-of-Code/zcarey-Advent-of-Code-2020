@@ -19,9 +19,9 @@ namespace AdventOfCode {
 		private Stopwatch timer = new Stopwatch();
 
 		// Input parser
-		private Parser<T> parser;
+		private ParserBase<StreamReader, T> parser;
 
-		protected ProgramStructure(Parser<T> parser) {
+		protected ProgramStructure(ParserBase<StreamReader, T> parser) {
 			this.parser = parser;
 		}
 

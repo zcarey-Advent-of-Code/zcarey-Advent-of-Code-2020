@@ -12,10 +12,17 @@ namespace Day4 {
 		Program() : base(new Parser()
 			.Filter(new LineReader())
 			.Filter(new TextBlockFilter())
-			.ForEach(new Parser()
-				.ForEach(new SeparatedParser())
-			)
-			.FilterCreate<Passport>()
+			.ForEach(
+				// For each text block:
+				new Parser<string[]>()
+				.ForEach(
+					// For each line in a text block...
+					new SeparatedParser()
+				) //So now we have a list of each line which contains a list of the elements in that line
+				.Combine() // Turns it into a single list containing all the elements
+				.ToArray() // Change the list into an array
+				.Create<Passport>()
+			) //ForEach returns a list of passports
 			.ToArray()
 		) { }
 
