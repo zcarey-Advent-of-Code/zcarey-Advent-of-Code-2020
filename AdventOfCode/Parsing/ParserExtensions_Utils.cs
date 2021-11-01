@@ -9,7 +9,7 @@ namespace AdventOfCode.Parsing {
 		/// <summary>
 		/// Converts the input IEnumerable into an array.
 		/// </summary>
-		public static Parser<TInput, TOutput[]> ToArray<TInput, TOutput>(this ParserBase<TInput, IEnumerable<TOutput>> source) {
+		public static Parser<TInput, TOutput[]> ToArray<TInput, TOutput>(this IParser<TInput, IEnumerable<TOutput>> source) {
 			return source.Parse(
 				(IEnumerable<TOutput> input) => input.ToArray()
 			);

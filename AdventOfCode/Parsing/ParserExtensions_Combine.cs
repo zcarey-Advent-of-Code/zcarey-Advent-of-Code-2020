@@ -25,7 +25,7 @@ namespace AdventOfCode.Parsing {
 		/// Converts a 2D array (arrays within an array) into a single array containing all the elements.
 		/// i.e. Converts IEnumerable&lt;IEnumerable&lt;string&gt;&gt; into IEnumerable&lt;string&gt;
 		/// </summary>
-		public static ParserFilter<TInput, TOutput> Combine<TInput, TOutput>(this ParserBase<TInput, IEnumerable<TOutput>[]> source) {
+		public static ParserFilter<TInput, TOutput> Combine<TInput, TOutput>(this IParser<TInput, IEnumerable<TOutput>[]> source) {
 			return source.Filter(ParserExtensions_Combine.Combine);
 		}
 
@@ -33,7 +33,7 @@ namespace AdventOfCode.Parsing {
 		/// Converts a 2D array (arrays within an array) into a single array containing all the elements.
 		/// i.e. Converts IEnumerable&lt;IEnumerable&lt;string&gt;&gt; into IEnumerable&lt;string&gt;
 		/// </summary>
-		public static ParserFilter<TInput, TOutput> Combine<TInput, TOutput>(this ParserBase<TInput, TOutput[][]> source) {
+		public static ParserFilter<TInput, TOutput> Combine<TInput, TOutput>(this IParser<TInput, TOutput[][]> source) {
 			return source.Filter(ParserExtensions_Combine.Combine);
 		}
 

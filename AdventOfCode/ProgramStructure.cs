@@ -19,9 +19,9 @@ namespace AdventOfCode {
 		private Stopwatch timer = new Stopwatch();
 
 		// Input parser
-		private ParserBase<StreamReader, T> parser;
+		private IParser<StreamReader, T> parser;
 
-		protected ProgramStructure(ParserBase<StreamReader, T> parser) {
+		protected ProgramStructure(IParser<StreamReader, T> parser) {
 			this.parser = parser;
 		}
 
@@ -115,7 +115,7 @@ namespace AdventOfCode {
 
 		private T LoadInputData(MemoryStream stream) {
 			stream.Position = 0;
-			return parser.ParseInput(new StreamReader(stream));
+			return parser.Parse(new StreamReader(stream));
 		}
 	}
 

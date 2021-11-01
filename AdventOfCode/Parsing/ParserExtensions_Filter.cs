@@ -9,18 +9,18 @@ namespace AdventOfCode.Parsing {
 		/// <summary>
 		/// Outputs an array of data by applying a function to the input data.
 		/// </summary>
-		public static ParserFilter<TInput, T> Filter<TInput, TOutput, T>(this ParserBase<TInput, TOutput> source, Func<TOutput, IEnumerable<T>> filter) {
+		public static ParserFilter<TInput, T> Filter<TInput, TOutput, T>(this IParser<TInput, TOutput> source, Func<TOutput, IEnumerable<T>> filter) {
 			return new ParserFilter<TInput, T>(
-				(TInput input) => filter.Invoke(source.ParseInput(input))
+				(TInput input) => filter.Invoke(source.Parse(input))
 				);
 		}
 
 		/// <summary>
 		/// Outputs an array of data by applying an <see cref="IParser{I, T}"/> to the input data.
 		/// </summary>
-		public static ParserFilter<TInput, T> Filter<TInput, TOutput, T>(this ParserBase<TInput, TOutput> source, IParser<TOutput, IEnumerable<T>> filter) {
+		public static ParserFilter<TInput, T> Filter<TInput, TOutput, T>(this IParser<TInput, TOutput> source, IParser<TOutput, IEnumerable<T>> filter) {
 			return new ParserFilter<TInput, T>(
-				(TInput input) => filter.Parse(source.ParseInput(input))
+				(TInput input) => filter.Parse(source.Parse(input))
 			);
 		}
 
